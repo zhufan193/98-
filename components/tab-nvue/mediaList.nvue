@@ -1,0 +1,186 @@
+<template>
+    <div>
+        <div class="list-cell" @click="bindClick">
+            <div class="media-list" v-if="data.title">
+                <div :class="[type==2?'media-image-right':'',type==1?'media-image-left':'']">
+                    <div class="media-content">
+                        <text :class="['media-title',type==1||type==2?'media-title2':'']">{{data.title}}</text>
+                        <div class="media-foot">
+                            <div class="media-info">
+                                <text class="info-text">{{data.source}}</text>
+                            </div>
+                            <text class="info-text">{{data.browser}}查看</text>
+                        </div>
+                    </div>
+                    <div v-if="data.image_list || data.cover" :class="['lazy','image-section',type==2?'image-section-right':'',type==1?'image-section-left':'']">
+                        <image :class="['image-list1','lazy__img',type==1||type==2?'image-list2':'']" v-if="data.cover"
+                            :src="show ? data.cover : ''" :data-index="index" @appear="show = true" @load="imageLoad" resize="cover"></image>
+                        <image :class="['image-list1','lazy__img','lazy__placeholder',loaded?'lazy__loaded':'']" src="/static/img/loading300x300.jpg" mode="aspectFill"></image>
+                        <image class="image-list3" v-if="data.image_list" :src="source.url" v-for="(source, i) in data.image_list"
+                            :key="i" resize="cover"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            data: {
+                type: Object,
+                default: function(e) {
+                    return {}
+                }
+            },
+            type: { // 0：标题底部显示大图或图片列表 1：左边显示图片、2：右边显示图片
+                type: Number,
+                default: 1
+            },
+            index: {
+                type: Number
+            }
+        },
+        data() {
+            return {
+                show: false,
+                loaded: false
+            }
+        },
+        methods: {
+            bindClick() {
+                this.$emit('click');
+            },
+            imageLoad(){
+                this.loaded = true;
+            }
+        }
+    }
+</script>
+
+<style>
+    .list-cell {
+        width: 750px;
+        padding: 0 30px;
+    }
+
+    .list-cell:active {
+        background-color: #eeeeee;
+    }
+
+    .media-list {
+        flex: 1;
+        flex-direction: column;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #edeff3;
+        padding: 32px 0;
+    }
+    
+    .media-content{
+		flex: 1;
+        justify-content: space-between;
+    }
+
+    .media-image-right {
+        flex-direction: row;
+    }
+
+    .media-image-left {
+        flex-direction: row-reverse;
+    }
+
+    .media-title {
+        flex: 1;
+    }
+
+    .media-title {
+        font-size: 34px;
+        color: #333;
+        lines: 2;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .media-title2 {
+        flex: 0;
+        line-height: 55px;
+        margin-top: -8rpx;
+    }
+
+    .image-section {
+        margin-top: 20px;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .image-section-right {
+        margin-top: 0px;
+        margin-left: 24px;
+		width: 200upx;
+		height: 150upx;
+    }
+
+    .image-section-left {
+        margin-top: 0px;
+        margin-right: 24px;
+		width: 200upx;
+		height: 150upx;
+    }
+
+    .image-list1 {
+        width: 690px;
+        height: 481px;
+    }
+
+    .image-list2 {
+		width: 200upx;
+		height: 150upx;
+    }
+
+    .image-list3 {
+		width: 200upx;
+		height: 150upx;
+    }
+
+    .media-info {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-text {
+        color: #c0c0c0;
+        font-size: 22px;
+    }
+
+	.info-text:last-child {
+		margin-right: 0;
+    }
+
+    .media-foot {
+        margin-top: 10px;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .lazy{
+        position: relative;
+    }
+        
+    .lazy__img {
+    	position: absolute;
+		width: 200upx;
+		height: 150upx;
+    }
+    
+    .lazy__placeholder {
+    	opacity: 1;
+    	transition: opacity 0.4s linear;
+    }
+    
+    .lazy__loaded {
+    	opacity: 0;
+    }
+</style>

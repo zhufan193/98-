@@ -1,0 +1,25 @@
+@import '@/style/mixin/flex.scss';
+
+.empty{
+    @include flex(center, center, column);
+    height: 450px;
+    
+    &__img{
+        display: block;
+        width: 400upx;
+        height: 400upx;
+    }
+    
+    &__text{
+        padding: 36upx 0 16upx;
+        color: $uni-text-color-grey;
+        font-size: $uni-font-size-sm;
+    }
+    
+    &__btn{
+        color: white;
+        background-color: $uni-color-primary;
+        padding: 0 20upx;
+        border-radius: 30upx;
+    }
+}

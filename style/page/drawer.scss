@@ -1,0 +1,38 @@
+@import '@/style/mixin/flex.scss';
+
+.drawer{
+    @include flex(null, null, column);
+    height: 100%;
+    
+    &__scroll{
+        @include flex-self(full);
+    }
+    
+    &__main{
+        background-color: $uni-color-error;
+        padding: 50px 0;
+    }
+    
+    &__bottom{
+        @include flex(null, center, row-reverse);
+        @include flex-self(keep);
+        height: 44px;
+        padding: 0 $uni-spacing-row-base;
+    }
+    
+    &__btn{
+        width: 180upx;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        color: #fff;
+        background-color: $color-main;
+        font-size: $uni-font-size-lg;
+        border-radius: 0 16px 16px 0;
+        
+        &--right{
+            background-color: #a2d7ff;
+            border-radius: 16px 0 0 16px;
+        }
+    }
+}

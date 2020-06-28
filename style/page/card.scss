@@ -1,0 +1,237 @@
+@import '../mixin/flex.scss';
+@import '../mixin/text-overflow.scss';
+@import '../mixin/price-before.scss';
+@import '../mixin/hr.scss';
+
+$card: '.card';
+
+#{$card} {
+    margin-bottom: $uni-spacing-col-base;
+    color: $uni-text-color;
+    background-color: $uni-bg-color;
+    // box-shadow: 0 4upx 6upx $uni-shadow-color;
+    border-radius: $uni-spacing-col-sm;
+    overflow: hidden;
+    
+    &--full{
+        border-radius: 0;
+    }
+    
+    &__head{
+        position: relative;
+        @include flex(between, top);
+        
+        &::after{
+            @include hr(bottom);
+        }
+        
+        &:last-child::after{
+            display: none;
+        }
+        
+        #{$card}__helper{
+            @include flex-self(keep);
+            padding: $uni-spacing-col-lg $uni-spacing-row-base 0 0;
+            font-size: $uni-font-size-xs;
+            color: $color-main;
+        }
+    }
+    
+    &__title{
+        @include flex-self(full);
+        padding: $uni-spacing-col-lg $uni-spacing-row-base;
+        color: $uni-text-color;
+        font-size: $uni-font-size-lg;
+        font-weight: 700;
+        
+        &--overflow{
+            @include text-overflow();
+        }
+    }
+    
+    &__main{
+        @include flex(null, null, column);
+        
+        &--col{
+            @include flex(null, null, row, wrap);
+            padding: $uni-spacing-col-base 0 $uni-spacing-col-base $uni-spacing-row-base;
+        }
+    }
+        
+    &__col{
+        box-sizing: border-box;
+        width: 50%;
+        padding-right: $uni-spacing-row-base;
+    }
+    
+    &__row{
+        @include flex();
+        width: 100%;
+        color: $uni-text-color-grey;
+        margin-bottom: 20rpx;
+        
+        &--img{
+            @include flex(null, null, null, wrap);
+            padding: 0;
+        }
+        
+        &--img4{
+            @include flex(null, null, null, wrap);
+            width: 400upx;
+        }
+        
+        &--hr{
+            margin-bottom: $uni-spacing-col-base;
+        }
+    }
+    
+    &__content{
+        padding: $uni-spacing-col-lg $uni-spacing-row-base;
+    }
+            
+    &__label{
+        @include flex-self(keep);
+        width: 4em;
+        height: 40upx;
+        color: $uni-text-color-grey;
+        font-size: $uni-font-size-base;
+        text-align: justify;
+        
+        &::after{
+            display: inline-block;
+            content: '';
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+    }
+    
+    &__info{
+        @include flex-self(full);
+        color: $uni-text-color;
+        font-size: $uni-font-size-base;
+        
+        &--red{
+            color: $uni-color-warning;
+        }
+        
+        &--error{
+            color: $uni-color-error;
+        }
+    }
+    
+    &__price{
+        font-size: $uni-font-size-base;
+        
+        &::before{
+            font-size: $uni-font-size-xs;
+            @extend %__priceBefore;
+        }
+    }
+        
+    &__badge{
+        @include flex-self(keep);
+        padding: $uni-spacing-col-sm / 2 $uni-spacing-row-sm;
+        color: $color-sub;
+        text-align: center;
+        font-size: $uni-font-size-xs * 2;
+        border: 1px solid $color-sub;
+        border-radius: $uni-border-radius-base * 2;
+        transform: scale(.5);
+        transform-origin: 100% 0%;
+        margin-bottom: -34rpx;
+        margin-left: -90rpx;
+
+        &--default{
+            color: $uni-text-color-grey;
+            border-color: $uni-text-color-grey;
+            transform-origin: 0% 0%;
+            margin-left: 0;
+        }
+        
+        &--btn{
+            @include flex-self(keep);
+            margin-bottom: -34rpx;
+            margin-left: -90rpx;
+            padding: $uni-spacing-col-sm / 2 $uni-spacing-row-base;
+            font-size: $uni-font-size-xs * 2;
+            color: $uni-text-color-inverse;
+            background-color: $color-main;
+            border-radius: $uni-border-radius-base * 2;
+            transform: scale(.5);
+            transform-origin: 100% 0%;
+        }
+    }
+        
+    &__box{
+        @include flex(between);
+    }
+        
+    &__img{
+        display: block;
+        width: 208upx;
+        height: 152upx;
+        
+        &--left{
+            @include flex-self(keep);
+            margin-right: $uni-spacing-row-base;
+            width: 184upx;
+            height: 138upx;
+        }
+        
+        &--nth3{
+            width: (750 - $uni-spacing-row-base * 4) / 3;
+            margin-right: $uni-spacing-row-base;
+            
+            &:nth-child(3n){
+                margin: 0
+            }
+        }
+    }
+    
+    &__row--img &__img{
+        width: 180upx;
+        height: 180upx;
+        margin: 0 16upx 16upx 0;
+        
+        &--width{
+            width: 480upx;
+            height: 360upx;
+            margin: 0;
+        }
+        
+        &--height{
+            width: 270upx;
+            height: 360upx;
+            margin: 0;
+        }
+    }
+    
+    &__foot{
+        @include flex(between, center);
+        
+        &--dashed{
+            position: relative;
+            padding: $uni-spacing-col-base 0;
+            margin: 0 $uni-spacing-row-base;
+            color: $uni-text-color-grey;
+            font-size: $uni-font-size-sm;
+            
+            &::after{
+                @include hr(top);
+                height: 0;
+                background-color: transparent;
+                border-top: 1px dashed $uni-border-color;
+            }
+        }
+    }
+    
+    &__banner{
+        display: block;
+        height: 300upx;
+        box-sizing: border-box;
+        margin: $uni-spacing-col-base $uni-spacing-row-base 0;
+        border-radius: $uni-border-radius-base;
+        overflow: hidden;
+    }
+}

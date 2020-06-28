@@ -1,0 +1,76 @@
+@import './mixin/flex.scss';                // flex(主轴,交叉轴,方向,换行,多轴线对齐) / flex-self(对齐,(布满||固定),顺序)
+@import './mixin/text-overflow.scss';       // 文本格式化超出省略号  参数：宽度,单行/多行
+@import './mixin/position-absolute.scss';   // 绝对定位  参数：上,右,下,左
+@import './mixin/triangle.scss';            // 画三角形  参数：宽度,朝向,颜色
+@import './mixin/hr.scss';                  // 添加分割线  参数：位置,间隔
+
+/*每个页面公共css */
+page {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	background-color: #f2f2f2;
+}
+
+view {
+	font-size: 28upx;
+	line-height: inherit
+}
+
+::-webkit-scrollbar{
+	width: 0;
+	height: 0;
+	color:transparent;
+}
+
+// 统一文章显示
+rich-text.article__rich{ 
+    .article__p{
+        font-size: 16px;
+        line-height: 1.8;
+        text-align: justify;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    .article__img{
+        display: block;
+        width: 100% !important;
+        height: initial !important;
+        margin-bottom: 20px;
+    }
+    
+    .article__full{
+        display: block;
+        width: 100% !important;
+        height: initial !important;
+    }
+}
+
+button[type=primary]{
+    background-color: $color-main;
+}
+// 统一大号文章显示
+rich-text.article__bigrich{
+    
+    .article__p{
+        font-size: 26px;
+        line-height: 1.8;
+        text-align: justify;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    .article__img{
+        display: block;
+        width: 100% !important;
+        height: initial !important;
+        margin-bottom: 20px;
+    }
+    
+    .article__full{
+        display: block;
+        width: 100% !important;
+        height: initial !important;
+    }
+}

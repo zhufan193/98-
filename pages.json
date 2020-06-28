@@ -1,0 +1,2018 @@
+{
+    //"condition": { //模式配置，仅开发期间生效
+      //  "current": 1, //当前激活的模式（list 的索引项）
+       // "list": [
+       //     {
+       //         "name": "home", //模式名称
+       //         "path": "pages/tabBar/home/home", //启动页面，必选
+       //          "query": "interval=4000&autoplay=false" //启动参数，在页面的onLoad函数里面得到。
+       //      },
+       //     {
+        //        "name": "map_search",
+       //          "path": "pages/map/map_search/map_search"
+       //      },
+		//	 {
+		//	     "name": "login",
+		//	      "path": "pages/user/login/login"
+		//	  },
+       //      {
+       //          "name": "news",
+       //         "path": "pages/news/detail/detail",
+      //           "query": "id=921" //启动参数，在页面的onLoad函数里面得到。
+      //       }
+    //     ]
+ //    },
+    "pages" : [
+        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        // 引导页
+        {
+            "path" : "pages/tabBar/guide/index",
+            "style" : {
+                "navigationStyle" : "custom",
+                "app-plus" : {
+                    "bounce" : "none"
+                }
+            }
+        },
+        // //#ifdef APP-PLUS
+        {
+            "path" : "pages/tabBar/guide/guide",
+            "style" : {
+                "navigationStyle" : "custom",
+                "app-plus" : {
+                    "bounce" : "none"
+                }
+            }
+        },
+        // #endif
+        // tabBar
+        {
+            "path" : "pages/tabBar/home/home",
+            "style" : {
+                "enablePullDownRefresh" : true,
+                "app-plus" : {
+                    "titleNView" : {
+                        "type" : "transparent",
+                        "buttons" : [
+                            {
+                                "text" : "返回",
+                                "fontSize" : "16",
+                                "float" : "right",
+                                "color" : "#fff"
+                            }
+                        ]
+                    },
+                    "pullToRefresh" : {
+                        "support" : true,
+                        "style" : "default"
+                    },
+                    "scrollIndicator" : "none"
+                }
+            }
+        },
+        //车运平台
+        {
+            "path" : "pages/tabBar/home/bus",
+            "style" : {
+                "navigationStyle" : "custom",
+                "app-plus" : {
+                    "bounce" : "none"
+                }
+            }
+        },
+		//匹配推荐
+		{
+		    "path" : "pages/map/mapmatch/matching",
+		    "style" : {
+		        "navigationStyle" : "custom",
+		        "app-plus" : {
+		            "bounce" : "none"
+		        }
+		    }
+		},
+		//船舶档案登记
+		{
+		    "path" : "pages/sail/register/register",
+		    "style" : {
+                "navigationBarTitleText" : "船舶档案登记",
+                "enablePullDownRefresh" : true,
+                "app-plus" : {
+                    "softinputMode" : "adjustResize",
+                    "softinputNavBar" : "none",
+                    "titleNView" : {
+                        "buttons" : [
+                          
+                        ]
+                    },
+                    "pullToRefresh" : {
+                        "support" : true,
+                        "style" : "default"
+                    }
+                }
+            }
+		},
+		{
+		    "path" : "pages/sail/register/ship-files",
+		    "style" : {
+		        "navigationBarTitleText" : "船舶档案",
+		        "enablePullDownRefresh" : true,
+		        "app-plus" : {
+		            "softinputMode" : "adjustResize",
+		            "softinputNavBar" : "none",
+		            "titleNView" : {
+		                "buttons" : [
+		                  
+		                ]
+		            },
+		            "pullToRefresh" : {
+		                "support" : true,
+		                "style" : "default"
+		            }
+		        }
+		    }
+		},
+		
+        {
+            "path" : "pages/tabBar/release/release",
+            "style" : {
+                "navigationStyle" : "custom"
+            }
+        },
+        {
+            "path" : "pages/tabBar/profile/profile",
+            "style" : {
+                "navigationBarTitleText" : "用户中心",
+                "navigationStyle" : "custom",
+                "app-plus" : {
+                    "titleNView" : {
+                        // #ifdef APP-PLUS
+                        "type" : "transparent",
+                        // #endif
+                        "buttons" : [
+                            {
+                                "fontSrc" : "/static/uni.ttf",
+                                "text" : "\ue502",
+                                "fontSize" : "28px",
+                                "width" : "54px",
+                                "background" : "rgba(0,0,0,0)"
+                            }
+                        ]
+                    },
+                    "bounce" : "none",
+                    "scrollIndicator" : "none"
+                }
+            }
+        },
+        {
+            "path" : "pages/tabBar/sail/sail",
+            "style" : {
+                "navigationBarTitleText" : "船源信息",
+                "enablePullDownRefresh" : true,
+                "app-plus" : {
+                    "softinputMode" : "adjustResize",
+                    "softinputNavBar" : "none",
+                    "titleNView" : {
+                        "buttons" : [
+                          
+                        ]
+                    },
+                    "pullToRefresh" : {
+                        "support" : true,
+                        "style" : "default"
+                    }
+                }
+            }
+        },
+        {
+            "path" : "pages/tabBar/pallet/pallet",
+            "style" : {
+                "navigationBarTitleText" : "货源信息",
+                "enablePullDownRefresh" : true,
+                "app-plus" : {
+                    "softinputMode" : "adjustResize",
+                    "softinputNavBar" : "none",
+                    "titleNView" : {
+                        "buttons" : [
+                            {
+                                "fontSize" : "14px",
+                                "text" : "筛选",
+                                "width" : "54px"
+                            }
+                        ]
+                    },
+                    "pullToRefresh" : {
+                        "support" : true,
+                        "style" : "default"
+                    }
+                }
+            }
+        },
+        // map
+        {
+            "path" : "pages/map/map_search/map_search",
+            "style" : {
+                "navigationBarTitleText" : "查船舶",
+                "navigationStyle" : "custom",
+                "navigationBarTextStyle" : "black",
+                "app-plus" : {
+                    "bounce" : "none",
+                    "scrollIndicator" : "none"
+                }
+            }
+        },
+        {
+            "path" : "pages/user/attention/attention",
+            "style" : {}
+        }
+        ,
+		{
+            "path" : "components/select-picker/select-picker",
+            "style" : {}
+        }
+    ],
+    "subPackages" : [
+        // news
+        {
+            "root" : "pages/news",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶资讯"
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "新闻详情",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 砂石骨料
+        {
+            "root" : "pages/sand",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "砂石骨料",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "砂石骨料筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "buy-add/buy-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布砂石求购",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "sell-add/sell-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布砂石供应",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "user/user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的砂石骨料交易"
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "砂石骨料详情",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 船舶交易
+        {
+            "root" : "pages/deal",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶交易",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "softinputMode" : "adjustResize",
+                            "softinputNavBar" : "none",
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶交易筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "buy-add/buy-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶求购",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "sell-add/sell-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶出售",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "user/user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的船舶交易"
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶交易详情",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 船舶租赁
+        {
+            "root" : "pages/rent",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶租赁",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "softinputMode" : "adjustResize",
+                            "softinputNavBar" : "none",
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶租赁筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "hire-add/hire-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶求租",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "rent-add/rent-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶出租",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "user/user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的船舶租赁"
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶租赁详情",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 竞价加油
+        {
+            "root" : "pages/oil",
+            "pages" : [
+                {
+                    "path" : "release/release",
+                    "style" : {
+                        "navigationBarTitleText" : "发布竞价加油",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "燃料供应",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "竞价加油筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "bid-detail/bid-detail",
+                    "style" : {
+                        "navigationBarTitleText" : "竞价详情",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "竞价规则",
+                                        "width" : "82px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none",
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            },
+                            "softinputNavBar" : "none",
+                            "softinputMode" : "adjustResize"
+                        }
+                    }
+                },
+                {
+                    "path" : "store-add/store-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布油商",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "bid-user/bid-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的燃油竞价",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "store-user/store-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的油商黄页"
+                    }
+                },
+                {
+                    "path" : "store-detail/store-detail",
+                    "style" : {
+                        "navigationBarTitleText" : "油商详情",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 船/货险
+        {
+            "root" : "pages/insurance",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "船/货险",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "order_sail/order_sail",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶保险订单",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "order_pallet/order_pallet",
+                    "style" : {
+                        "navigationBarTitleText" : "货物保险订单",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+		//基本管理
+		{
+		    "root" : "pages/management",
+		    "pages" : [
+		        {
+		            "path" : "order/order",
+		            "style" : {
+		                "navigationBarTitleText" : "抢购订单管理",
+		                "app-plus" : {
+		                    "scrollIndicator" : "none"
+		                }
+		            }
+		        },
+		        {
+		            "path" : "contract/contract",
+		            "style" : {
+		                "navigationBarTitleText" : "合同下载",
+		                "app-plus" : {
+		                    "scrollIndicator" : "none"
+		                }
+		            }
+		        },
+		        {
+		            "path" : "oil/oil",
+		            "style" : {
+		                "navigationBarTitleText" : "油料订单",
+		                "app-plus" : {
+		                    "scrollIndicator" : "none"
+		                }
+		            }
+		        },
+		        {
+		            "path" : "Insurance/Insurance",
+		            "style" : {
+		                "navigationBarTitleText" : "保险合同管理",
+		                "app-plus" : {
+		                    "scrollIndicator" : "none"
+		                }
+		            }
+		        }
+		    ]
+		},
+        // 订单
+        {
+            "root" : "pages/order",
+            "pages" : [
+                {
+                    "path" : "sea-my/sea-my",
+                    "style" : {
+                        "navigationBarTitleText" : "我的报价",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "sea-my-detail/sea-my-detail",
+                    "style" : {
+                        "navigationBarTitleText" : "我的报价详情",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "sea/sea",
+                    "style" : {
+                        "navigationBarTitleText" : "海运订单",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "sail-to-be-confiremed/sail-to-be-confiremed",
+                    "style" : {
+                        "navigationBarTitleText" : "待确认订单详情",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "pallet-to-be-confiremed/pallet-to-be-confiremed",
+                    "style" : {
+                        "navigationBarTitleText" : "待确认订单详情",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "sea-detail/sea-detail",
+                    "style" : {
+                        "navigationBarTitleText" : "海运订单详情",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "sea-contract/sea-contract",
+                    "style" : {
+                        "navigationBarTitleText" : "海运订单电子合同",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+				{
+				    "path" : "buy/buy",
+				    "style" : {
+				        "navigationBarTitleText" : "抢购订单管理",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "release/release",
+				    "style" : {
+				        "navigationBarTitleText" : "货源管理",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "release/ship",
+				    "style" : {
+				        "navigationBarTitleText" : "船源管理",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "shipTrading/shipTrading",
+				    "style" : {
+				        "navigationBarTitleText" : "船舶交易",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "shipTrading/trading-order",
+				    "style" : {
+				        "navigationBarTitleText" : "船舶交易订单",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "service-appointment/service-appointment",
+				    "style" : {
+				        "navigationBarTitleText" : "船舶维修预约单",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "getOrder/getOrder",
+				    "style" : {
+				        "navigationBarTitleText" : "货源订单管理",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "getOrder/shipSource",
+				    "style" : {
+				        "navigationBarTitleText" : "船源订单管理",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "credit/credit",
+				    "style" : {
+				        "navigationBarTitleText" : "信用指数",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
+				{
+				    "path" : "signContract/signContract",
+				    "style" : {
+				        "navigationBarTitleText" : "签订",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				}
+            ]
+        },
+		
+        // 发票管理
+        {
+            "root" : "pages/invoice",
+            "pages" : [
+                {
+                    "path" : "list/list",
+                    "style" : {
+                        "navigationBarTitleText" : "发票管理",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "release/release",
+                    "style" : {
+                        "navigationBarTitleText" : "新增发票信息",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "编辑发票信息",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "删除",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 银行账号
+        {
+            "root" : "pages/bank",
+            "pages" : [
+                {
+                    "path" : "list/list",
+                    "style" : {
+                        "navigationBarTitleText" : "银行账号管理",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "release/release",
+                    "style" : {
+                        "navigationBarTitleText" : "新增银行账号",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "银行账号",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "删除",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "indexed-list/indexed-list",
+                    "style" : {
+                        "navigationBarTitleText" : "选择开户银行",
+                        "app-plus" : {
+                            "bounce" : "none",
+                            "animationType" : "slide-in-bottom",
+                            "animationDuration" : "700"
+                        }
+                    }
+                }
+            ]
+        },
+        // 海事局/海难救援
+        {
+            "root" : "pages/other",
+            "pages" : [
+                {
+                    "path" : "wreck_rescue/wreck_rescue",
+                    "style" : {
+                        "navigationBarTitleText" : "海难救援",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "清除",
+                                        "width" : "54px"
+                                    }
+                                ],
+                                "searchInput" : {
+                                    "align" : "center",
+                                    "backgroundColor" : "#fff",
+                                    "placeholderColor" : "#999",
+                                    "borderRadius" : "16px",
+                                    "placeholder" : "海难救援查询"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "maritime_office/maritime_office",
+                    "style" : {
+                        "navigationBarTitleText" : "海事局"
+                    }
+                },
+                {
+                    "path" : "maritime_office_detail/maritime_office_detail",
+                    "style" : {
+                        "navigationBarTitleText" : "海事局详情",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // 船舶代理
+        {
+            "root" : "pages/agent",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶代理",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "agent-screen/agent-screen",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶代理筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "agent-add/agent-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶代理",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "agent-user/agent-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的船舶代理"
+                    }
+                }
+            ]
+        },
+        // 船舶维修
+        {
+            "root" : "pages/maintenance",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶维修",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "maintenance-screen/maintenance-screen",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶维修筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "maintenance-add/maintenance-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶维修",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "maintenance-user/maintenance-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的船舶维修"
+                    }
+                }
+            ]
+        },
+        // 配件设备
+        {
+            "root" : "pages/parts",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "配件设备",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "parts-screen/parts-screen",
+                    "style" : {
+                        "navigationBarTitleText" : "配件设备筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "parts-add/parts-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船舶备件",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "parts-user/parts-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的配件设备"
+                    }
+                }
+            ]
+        },
+        // 法律咨询
+        {
+            "root" : "pages/law",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "法律咨询",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "law-screen/law-screen",
+                    "style" : {
+                        "navigationBarTitleText" : "法律筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "law-add/law-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布法律咨询",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "law-user/law-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的法律咨询"
+                    }
+                }
+            ]
+        },
+        // 财务咨询
+        {
+            "root" : "pages/financial",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "财务咨询",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "financial-screen/financial-screen",
+                    "style" : {
+                        "navigationBarTitleText" : "财务筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "financial-add/financial-add",
+                    "style" : {
+                        "navigationBarTitleText" : "发布财务咨询",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "financial-user/financial-user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的财务咨询"
+                    }
+                }
+            ]
+        },
+        // company
+        {
+            "root" : "pages/company",
+            "pages" : [
+                {
+                    "path" : "management/management",
+                    "style" : {
+                        "navigationBarTitleText" : "企业认证/管理",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "verify/verify",
+                    "style" : {
+                        "navigationBarTitleText" : "企业认证"
+                    }
+                },
+                {
+                    "path" : "info/info",
+                    "style" : {
+                        "navigationBarTitleText" : "企业详情",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "scrollIndicator" : "none",
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "企业详情",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "apply/apply",
+                    "style" : {
+                        "navigationBarTitleText" : "申请加入企业"
+                    }
+                },
+                {
+                    "path" : "manager-edit/manager-edit",
+                    "style" : {
+                        "navigationBarTitleText" : "更换企业管理员"
+                    }
+                },
+                {
+                    "path" : "about-us/about-us",
+                    "style" : {
+                        "navigationBarTitleText" : "关于我们"
+                    }
+                }
+            ]
+        },
+        // pallet
+        {
+            "root" : "pages/pallet",
+            "pages" : [
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "货盘筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "货源详细",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "quote/quote",
+                    "style" : {
+                        "navigationBarTitleText" : "船主报价",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "release/release",
+                    "style" : {
+                        "navigationBarTitleText" : "发布货盘",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "user/user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的货盘"
+                    }
+                }
+            ]
+        },
+        // port
+        {
+            "root" : "pages/port",
+            "pages" : [
+                {
+                    "path" : "query/query",
+                    "style" : {
+                        "navigationBarTitleText" : "港口查询",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "筛选",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "港口筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "港口详情",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+				{
+				    "path" : "agent/agent",
+				    "style" : {
+				        "navigationBarTitleText" : "港口代理",
+				        "app-plus" : {
+				            "scrollIndicator" : "none"
+				        }
+				    }
+				}
+            ]
+        },
+        // staff
+        {
+            "root" : "pages/staff",
+            "pages" : [
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶员工信息"
+                    }
+                },
+                {
+                    "path" : "add/add",
+                    "style" : {
+                        "navigationBarTitleText" : "添加船舶员工"
+                    }
+                }
+            ]
+        },
+        // sail
+        {
+            "root" : "pages/sail",
+            "pages" : [
+                {
+                    "path" : "screen/screen",
+                    "style" : {
+                        "navigationBarTitleText" : "船期筛选",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "船源详情",
+                        "app-plus" : {
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "举报",
+                                        "width" : "54px"
+                                    }
+                                ]
+                            },
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "quote/quote",
+                    "style" : {
+                        "navigationBarTitleText" : "货主报价",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "release/release",
+                    "style" : {
+                        "navigationBarTitleText" : "发布船期",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "user/user",
+                    "style" : {
+                        "navigationBarTitleText" : "我的船期"
+                    }
+                }
+            ]
+        },
+        // user
+        {
+            "root" : "pages/user",
+            "pages" : [
+                {
+                    "path" : "login/login",
+                    "style" : {
+                        "navigationBarTitleText" : "登录",
+                        "navigationBarTextStyle" : "black",
+                        "navigationStyle" : "custom",
+                        "app-plus" : {
+                            "titleNView" : false,
+                            "bounce" : "none",
+                            "animationType" : "slide-in-bottom",
+                            "animationDuration" : "700"
+                        }
+                    }
+                },
+                {
+                    "path" : "reg/reg",
+                    "style" : {
+                        "navigationBarTitleText" : "注册",
+                        "navigationBarTextStyle" : "black",
+                        "navigationStyle" : "custom",
+                        "app-plus" : {
+                            "titleNView" : false,
+                            "bounce" : "none",
+                            "animationType" : "slide-in-bottom",
+                            "animationDuration" : "700"
+                        }
+                    }
+                },
+                {
+                    "path" : "forget-password/forget-password",
+                    "style" : {
+                        "navigationBarTitleText" : "忘记密码",
+                        "navigationBarTextStyle" : "black",
+                        "navigationStyle" : "custom",
+                        "app-plus" : {
+                            "titleNView" : false,
+                            "bounce" : "none",
+                            "animationType" : "slide-in-bottom",
+                            "animationDuration" : "700"
+                        }
+                    }
+                },
+                {
+                    "path" : "info/info",
+                    "style" : {
+                        "navigationBarTitleText" : "个人资料",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "chang-info/chang-info",
+                    "style" : {
+                        "navigationBarTitleText" : "修改资料",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "collection/collection",
+                    "style" : {
+                        "navigationBarTitleText" : "收藏夹",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "attention/attention",
+                    "style" : {
+                        "navigationBarTitleText" : "关注",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "verify/verify",
+                    "style" : {
+                        "navigationBarTitleText" : "个人实名认证"
+                    }
+                },
+                {
+                    "path" : "cancel/cancel",
+                    "style" : {
+                        "navigationBarTitleText" : "账号注销",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                }
+            ]
+        },
+        // message
+        {
+            "root" : "pages/message",
+            "pages" : [
+                {
+                    "path" : "tabbar/tabbar",
+                    "style" : {
+                        "navigationBarTitleText" : "消息",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "style" : "default"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "消息详情",
+                        "backgroundColor" : "#FFFFFF"
+                    }
+                }
+            ]
+        },
+        // common
+        {
+            "root" : "pages/common",
+            "pages" : [
+                {
+                    "path" : "release/release",
+                    "style" : {
+                        "navigationStyle" : "custom",
+                        "navigationBarTextStyle" : "black",
+                        "app-plus" : {
+                            "bounce" : "none",
+                            "animationType" : "slide-in-bottom",
+                            "animationDuration" : "700"
+                        }
+                    }
+                },
+                {
+                    "path" : "search/search",
+                    "style" : {
+                        "app-plus" : {
+                            "titleNView" : {
+                                "autoBackButton" : false,
+                                "buttons" : [
+                                    {
+                                        "text" : "清除",
+                                        "fontSize" : "14px",
+                                        "width" : "54px"
+                                    }
+                                ],
+                                "searchInput" : {
+                                    "autoFocus" : true,
+                                    "align" : "left",
+                                    "backgroundColor" : "#fff",
+                                    "placeholderColor" : "#999",
+                                    "borderRadius" : "16px",
+                                    "placeholder" : "搜索您感兴趣的内容"
+                                }
+                            },
+                            "scrollIndicator" : "none",
+                            "animationType" : "fade-in"
+                        }
+                    }
+                },
+                {
+                    "path" : "service-chat/service-chat",
+                    "style" : {
+                        "navigationStyle" : "custom",
+                        "navigationBarTitleText" : "运有方在线客服",
+                        "app-plus" : {
+                            "softinputMode" : "adjustResize",
+                            "softinputNavBar" : "none",
+                            "bounce" : "none",
+                            "animationType" : "slide-in-bottom",
+                            "animationDuration" : "700"
+                        }
+                    }
+                },
+                {
+                    "path" : "report/report",
+                    "style" : {
+                        "navigationBarTitleText" : "举报"
+                    }
+                },
+                {
+                    "path" : "feedback/feedback",
+                    "style" : {
+                        "navigationBarTitleText" : "意见建议"
+                    }
+                },
+                {
+                    "path" : "error/error",
+                    "style" : {
+                        "navigationBarTitleText" : "XXX错误"
+                    }
+                },
+                {
+                    "path" : "rich-text/rich-text",
+                    "style" : {
+                        "navigationBarTitleText" : "详情",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "rich-text-full/rich-text-full",
+                    "style" : {
+                        // #ifdef APP-PLUS
+                        "transparentTitle" : "always",
+                        // #endif
+                        "navigationBarTitleText" : "",
+                        "app-plus" : {
+                            "scrollIndicator" : "none",
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "up-data/up-data",
+                    "style" : {
+                        "navigationBarTitleText" : "软件更新",
+                        "app-plus" : {
+                            "bounce" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "web-view/web-view",
+                    "style" : {
+                        "navigationBarTitleText" : "加载中，请稍后",
+                        "app-plus" : {
+                            "scrollIndicator" : "none"
+                        }
+                    }
+                },
+                {
+                    "path" : "web-store/web-store",
+                    "style" : {
+                        "navigationBarTitleText" : "水马商城",
+                        "app-plus" : {
+                            "bounce" : "none",
+                            "scrollIndicator" : "none",
+                            "titleNView" : {
+                                "buttons" : [
+                                    {
+                                        "fontSize" : "14px",
+                                        "text" : "退出商城",
+                                        "width" : "88px"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        // ship
+        {
+            "root" : "pages/ship",
+            "pages" : [
+                {
+                    "path" : "management/management",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶认证管理",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "info/info",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶详情",
+                        "enablePullDownRefresh" : true,
+                        "app-plus" : {
+                            "scrollIndicator" : "none",
+                            "pullToRefresh" : {
+                                "support" : true,
+                                "color" : "#0091E6",
+                                "style" : "circle",
+                                "offset" : "44px"
+                            }
+                        }
+                    }
+                },
+                {
+                    "path" : "detail/detail",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶基本信息"
+                    }
+                },
+                {
+                    "path" : "edit/edit",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶基本信息编辑"
+                    }
+                },
+                {
+                    "path" : "operator/operator",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶所有人/经营人"
+                    }
+                },
+                {
+                    "path" : "verify/verify",
+                    "style" : {
+                        "navigationBarTitleText" : "船舶认证"
+                    }
+                },
+                {
+                    "path" : "apply/apply",
+                    "style" : {
+                        "navigationBarTitleText" : "申请加入船舶"
+                    }
+                },
+                {
+                    "path" : "manager-edit/manager-edit",
+                    "style" : {
+                        "navigationBarTitleText" : "更换船舶管理员"
+                    }
+                }
+            ]
+        }
+    ],
+    "preloadRule" : {
+        "pages/tabBar/sail/sail" : {
+            "packages" : [ "pages/sail" ],
+            "network" : "wifi"
+        },
+        "pages/tabBar/pallet/pallet" : {
+            "packages" : [ "pages/pallet" ],
+            "network" : "wifi"
+        },
+        "pages/tabBar/profile/profile" : {
+            "packages" : [ "pages/user" ],
+            "network" : "wifi"
+        }
+    },
+    "globalStyle" : {
+        "navigationBarBackgroundColor" : "#0091E6",
+        "navigationBarTitleText" : "九八航运",
+        "backgroundColor" : "#f2f2f2",
+        "backgroundColorTop" : "#f2f2f2",
+        "backgroundColorBottom" : "#f2f2f2"
+    },
+    "tabBar" : {
+        "color" : "#999",
+        "selectedColor" : "#0091e6",
+        "borderStyle" : "black",
+        "backgroundColor" : "#FFFFFF",
+        "list" : [
+            {
+                "pagePath" : "pages/tabBar/home/home",
+                "text" : "首页",
+                "iconPath" : "static/icon/home.png",
+                "selectedIconPath" : "static/icon/homeHL.png"
+            },
+            {
+                "pagePath" : "pages/tabBar/sail/sail",
+                "text" : "船源",
+                "iconPath" : "static/icon/sail.png",
+                "selectedIconPath" : "static/icon/sailHL.png"
+            },
+            // #ifndef APP-PLUS
+            {
+                "pagePath" : "pages/tabBar/release/release",
+                "text" : "发布",
+                "iconPath" : "static/icon/release.png",
+                "selectedIconPath" : "static/icon/release.png"
+            },
+            // #endif
+            {
+                "pagePath" : "pages/tabBar/pallet/pallet",
+                "text" : "货源",
+                "iconPath" : "static/icon/pallet.png",
+                "selectedIconPath" : "static/icon/palletHL.png"
+            },
+            {
+                "pagePath" : "pages/tabBar/profile/profile",
+                "text" : "我的",
+                "iconPath" : "static/icon/my.png",
+                "selectedIconPath" : "static/icon/myHL.png"
+            }
+        ],
+        // #ifdef APP-PLUS
+        "midButton" : {
+            "width" : "72px",
+            "height" : "72px",
+            "text" : "发布",
+            "iconPath" : "static/icon/release-empty.png",
+            "backgroundImage" : "static/icon/release-move.png"
+        }
+    }
+}
+// #endif
+

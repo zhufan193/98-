@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="MobileOptimized" content="320"/>
+        <title>查船舶</title>
+        <link rel="stylesheet" href="./css/ElaneMap.min.css"/>
+        <link rel="stylesheet" href="./css/base.css"/>
+        <link rel="stylesheet" href="./css/style.css"/>
+        <link rel="stylesheet" href="./css/dateRange.css"/>
+    </head>
+    <body>      
+        <div id="map" class="my-map">
+        </div>
+
+        <div class="nav">
+          <div class="nav-back is_back"></div>
+          <div class="nav-search shadow_2">
+            <div class="nav-search-input is_search">船名、呼号、MMSI、IMO</div>
+            <div class="nav-screen is_screen">筛选</div>
+          </div>
+          <div class="nav-btn">
+            <div class="btn btn-chart shadow_2">海图</div>
+            <!-- <div class="btn btn-port shadow_2">热门<br/>港口</div> -->
+            <div class="btn btn-attention shadow_2"><div style="display: flex;flex-direction: column;"><span>关注</span><span>船舶</span></div></div>
+            <div class="btn btn-typhoon shadow_2">台风</div>
+            <div class="btn btn-range shadow_2">测距</div>
+            <div class="btn btn-setting shadow_2">设置</div>
+          </div>
+        </div>
+
+        <!-- 定位 -->
+        <div class="location shadow_2 is_location"></div>
+        
+        <!-- 底部船舶 -->
+        <div class="foot">
+          <div class="foot-tabbar">
+            <div id="foot-about" class="foot-tabbar-cell">
+              <div class="foot-tabbar-img foot-tabbar-about"></div>
+              详情
+            </div>
+            <div id="foot-attention" class="foot-tabbar-cell">
+              <div class="foot-tabbar-img foot-tabbar-attention"></div>
+              <span id="foot-attention-txt">关注</span>
+            </div>
+            <div id="foot-truck" class="foot-tabbar-cell">
+              <div class="foot-tabbar-img foot-tabbar-truck"></div>
+              轨迹
+            </div>
+            <div id="foot-phone" class="foot-tabbar-cell active" data-value="0">
+              <div class="foot-tabbar-img foot-tabbar-phone"></div>
+              <span id="foot-phone-txt">联系平台</span>
+            </div>
+          </div>
+          <div class="foot-info">
+            <div class="foot-head">
+              <div id="foot_info" class="foot-title"></div>
+              <div class="foot-close is_foot_close"></div>
+            </div>
+            <div id="foot_voyage" class="foot-main sail"></div>
+          </div>
+          <div class="foot-truck">
+            <div class="foot-truck-item active" data-day="7">七天轨迹</div>
+            <div class="foot-truck-item" data-day="30">30天轨迹</div>
+            <div class="foot-truck-item" data-day="0">隐藏轨迹</div>
+          </div>
+        </div>
+
+        <!-- 台风 -->
+        <div id="popup-typhoon" class="popup">
+          <div class="popup-main">
+            <div class="typhoon-head">
+              <div class="typhoon-btn typhoon-close is_typhoon_close">关闭</div>
+              <div class="typhoon-btn is_typhoon_reset">重置</div>
+            </div>
+            <div class="typhoon">
+              <div class="typhoon-main">
+                <div class="typhoon-left"></div>
+                <div class="typhoon-right"></div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-mask is_typhoon_close"></div>
+        </div>
+
+        <!-- 图源 -->
+        <div id="popup-chart" class="popup">
+          <div class="popup-main popup-main-middle">
+            <div class="chart">
+              <div class="chart-head">选择主题</div>
+              <div class="chart-main">
+                <div class="chart-cell " data-map="MT_GOOGLE" data-txt="地图">
+                  <div class="chart-img"><img src="./img/MT_GOOGLE.png" /></div>
+                  <div class="chart-txt">地图</div>
+                </div>
+                <div class="chart-cell active" data-map="MT_SEA" data-txt="海图">
+                    <div class="chart-img"><img src="./img/MT_SEA.png" /></div>
+                    <div class="chart-txt">海图</div>
+                </div>
+                <div class="chart-cell" data-map="MT_SATELLITE" data-txt="卫星">
+                    <div class="chart-img"><img src="./img/MT_SATELLITE.png" /></div>
+                    <div class="chart-txt">卫星图</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="popup-chart-mask" class="popup-mask"></div>
+        </div>
+
+        <!-- 筛选 -->
+        <div id="page_screen" class="page">
+          <div class="page-nav">
+            <div class="page-nav-btn page-nav-back is_page_back"></div>
+            <div class="page-nav-title">船舶筛选</div>
+            <div class="page-nav-btn"></div>
+          </div>
+          <div class="page-main">
+            <div class="page-tabbar">
+              <div id="screen_left" class="page-tabbar-left">
+                <div class="page-tabbar-item active" data-type="screen_type">船舶类型</div>
+                <div class="page-tabbar-item" data-type="screen_dest">目的港口</div>
+                <div class="page-tabbar-item" data-type="screen_eta">到港时间</div>
+                <div class="page-tabbar-item" data-type="screen_draught">吃水状态</div>
+                <div class="page-tabbar-item" data-type="screen_deadweight">船舶吨位</div>
+                <div class="page-tabbar-item" data-type="screen_length">船舶长度</div>
+              </div>
+              <div id="screen_main" class="page-tabbar-right">
+                <div id="screen_type" class="page-tabbar is_screen_tabbar_list" style="display: flex;"></div>
+                <div id="screen_dest" class="page-tabbar is_screen_tabbar_list" style="display: none;"></div>
+                <div id="screen_eta" class="page-tabbar-list is_screen_tabbar_list" style="display: none;">
+                  <div class="page-item-input is_screen_input">
+                    <div class="page-item-label">到港时间</div>
+                    <div id="date1" class="page-item-field page-item-field-placeholder" data-value="">点击输入</div>
+                  </div>
+                  <!-- <div class="page-item-input is_screen_input" data-type="eta_min" data-value="">
+                    <div class="page-item-label">最小到港时间</div>
+                    <div id="screen_eta_min" class="page-item-field-placeholder" data-value="">点击输入</div>
+                  </div>
+                  <div class="page-item-input is_screen_input" data-type="eta_max" data-value="">
+                    <div class="page-item-label">最大到港时间</div>
+                    <div id="screen_eta_max" class="page-item-field-placeholder" data-value="">点击输入</div>
+                  </div> -->
+                </div>
+                <div id="screen_draught" class="page-tabbar-list is_screen_tabbar_list" style="display: none;"></div>
+                <div id="screen_deadweight" class="page-tabbar-list is_screen_tabbar_list" style="display: none;">
+                  <div class="page-item-input">
+                    <div class="page-item-label">最小吨位</div>
+                    <input id="screen_deadweight_min" class="page-item-field" type="number" pattern="\d*" data-type="deadweight_min" placeholder="点击输入"/>
+                  </div>
+                  <div class="page-item-input">
+                    <div class="page-item-label">最大吨位</div>
+                    <input id="screen_deadweight_max" class="page-item-field" type="number" pattern="\d*" data-type="deadweight_max" placeholder="点击输入"/>
+                  </div>
+                </div>
+                <div id="screen_length" class="page-tabbar-list is_screen_tabbar_list" style="display: none;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="page-bottom">
+            <div class="page-btn page-btn-reset is_screen_reset">
+              重置
+            </div>
+            <div class="page-btn is_screen_confirm">
+              确定
+            </div>
+          </div>
+        </div>
+
+        <!-- 查询 -->
+        <div id="page_search" class="page">
+          <div class="page-nav">
+            <div class="page-nav-btn page-nav-back is_page_back"></div>
+            <div class="page-nav-search">
+                <input id="search-input" type="text" placeholder="船名、呼号、MMSI、IMO" />
+            </div>
+          </div>
+          <div class="page-main">
+            <div class="page-info" style="display: none;">共查询到<span id="searchSize" class="red"></span>条相关数据</div>
+            <div id="searchData" class="page-list"></div>
+          </div>
+        </div>
+
+        <!-- 设置 -->
+        <div id="page_set" class="page">
+          <div class="page-nav">
+            <div class="page-nav-btn page-nav-back is_page_back"></div>
+            <div class="page-nav-title">设置</div>
+            <div class="page-nav-btn"></div>
+          </div>
+          <div class="page-main">
+            <div class="page-list">
+              <div class="page-item page-item-switch">
+                全球潮汐
+                <div id="switch_chaoxi" class="switch"><div class="switch-handle"></div></div>
+              </div>
+              <div class="page-item page-item-switch">
+                海区预报
+                <div id="switch_haiquyubao" class="switch"><div class="switch-handle"></div></div>
+              </div>
+              <div class="page-item page-item-switch">
+                显示港口
+                <div id="switch_port" class="switch"><div class="switch-handle"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 关注船舶 -->
+        <div id="page_attention" class="page">
+          <div class="page-nav">
+            <div class="page-nav-btn page-nav-back is_page_back"></div>
+            <div class="page-nav-title">我的关注</div>
+            <div class="page-nav-btn"></div>
+          </div>
+          <div class="page-tabs">
+            <div data-type="team" data-load="1" class="page-tabs-cell active">我的船队</div>
+            <div data-type="follow" data-load="0" class="page-tabs-cell">关注的船</div>
+          </div>
+          <div class="page-main">
+            <div id="page_attention_team" class="page-list page-team-tip" style="display: flex;"></div>
+            <div id="page_attention_follow" class="page-list" style="display: none;"></div>
+          </div>
+        </div>
+        
+        <!-- 船舶详情 -->
+        <div id="page_about" class="page">
+          <div class="page-nav">
+            <div class="page-nav-btn page-nav-back is_page_back"></div>
+            <div class="page-nav-title"></div>
+            <div class="page-nav-btn"></div>
+          </div>
+          <div class="page-tabs">
+            <div class="page-tabs-cell active" data-type="info">AIS信息</div>
+            <div class="page-tabs-cell" data-type="archives">船舶档案</div>
+            <div class="page-tabs-cell" data-type="history">历史航次</div>
+            <div class="page-tabs-cell" data-type="meteorological">海洋气象</div>
+          </div>
+          <div class="page-main">
+            <div id="page_about_info" class="page-list" style="display: flex;"></div>
+            <div id="page_about_archives" class="page-list" style="display: none;"></div>
+            <div id="page_about_history" class="page-list" style="margin-top: 0;display: none;"></div>
+            <div id="page_about_meteorological" class="page-list" style="display: none;"></div>
+          </div>
+        </div>
+
+        <script type="text/javascript" src="./js/uni.webview.1.5.2.js"></script>
+        <script type="text/javascript" src="./js/jquery.min.js"></script>
+        <script type="text/javascript" src="./js/ElaneMap.min.js"></script>
+        <script type="text/javascript" src="./js/dateRange.js"></script>
+        <script type="text/javascript" src="./js/formatDate.js"></script>
+        <script type="text/javascript" src="./js/common.js"></script>
+        <script type="text/javascript">
+            var baseUrl = 'https://api.98hangyun.com/';
+            var token = '';
+            // token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvYXBpLmNkZHZpcC5jb21cL2FwaVwvdjFcL2xvZ2luX2FjY291bnQiLCJpYXQiOjE1NzQyMzI2MTgsImV4cCI6MTU3NDQwNTQxOCwibmJmIjoxNTc0MjMyNjE4LCJqdGkiOiJQMHJHeUx4dWJIa0dmVndpIiwic3ViIjozLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZ3VhcmQiOiJhcGkifQ.8W6W0_LIJCZ7A3uRRAE-jygw4JoqzcA239t357kG4_M';
+            var mmsi = '', searchVal, searchType, searchLast = 1, lastMore = 'more', portValue = 'hot';
+            var customer_call = ''// 客服电话
+            var toast = {
+                show: function(message) {
+                    console.log('提示：' + message);
+                },
+                showWarn: function(message) {
+                    console.log('错误提示：' + message);
+                },
+                showConfirm: function(message) {
+                    console.log('确认：' + message);
+                },
+                showWaiting: function(message = '加载中，请稍后...') {
+                    console.log('等待！' + message);
+                },
+                closeWaiting: function() {
+                    console.log('关闭等待！');
+                },
+                concurrentCloseWaiting: function(i, num) {
+                  if(i === num){
+                    console.log('关闭等待！');
+                  }
+                }
+            };
+            // 创建地图示例
+            var options = {
+                // ak:"1F6D701272402D1E7D8D316CCE519123",
+                ak:"ed4b4805dbbc436b8ad83d5054be9eb4",
+                // 显示地图类型
+                mapTypes: ['MT_SEA', 'MT_GOOGLE', 'MT_SATELLITE'], 
+                // 默认展示地图类型(???无效)
+                // defaultMapType: 'MT_SEA',
+                //初始缩放级别
+                zoom: 6,
+                measureCtrl: {
+                    // 是否开启测距控件，默认：true
+                    isShow: true,
+                    // 是否显示测距按钮，默认：true
+                    showMeasurementsMeasureControl: false,
+                    // 是否显示删除按钮，默认：true
+                    showMeasurementsClearControl: false,
+                    // 是否显示切换单位按钮，默认：true
+                    showUnitControl: false
+                },
+                //缩放工具控件的显示隐藏
+                zoomControlElane: {isShow: true, position: 'bottomright'},
+                //地图切换控件的位置
+                basemapsControl: {isShow: false},
+                // 缩放级别显示控件
+                zoomviewControl: {isShow: false},
+                //鼠标移动悬浮经纬度控件
+                mousePostionCtrl: {isShow: false},
+                // 地图初始化完成，回调方法
+                mapReadyCallBack: function (map) {
+                  _map.basemapsControl.changeMap('MT_SEA');
+                },
+            };
+
+            var _map = new ShipxyAPI.Map("map", options);
+            var voyageData = [];
+            var port_cn = [];
+            var currShip = {};
+            //加载办事处
+            var office_icon = L.icon({
+                iconUrl: "./img/office.png",
+                iconAnchor: [16, 16]
+            });
+            //加载港口
+            var port_icon = L.icon({
+                iconUrl: "./img/port.png",
+                iconAnchor: [16, 16]
+            });
+
+            // 开启轨迹服务
+            ShipxyAPI.TrackService(_map);
+            // 开启航次服务
+            ShipxyAPI.voyageService(_map);
+            // 专业气象，开启
+            ShipxyAPI.WeatherService(_map);
+            // 开启区域船服务
+            var canvasShips = ShipxyAPI.ShipService(_map, {
+                enableAreaShip: false,// 区域船
+                enableFleetShip: false,// 船队船
+                drawShipsEndCallBack:function(data){
+                    //绘制完区域船后回调
+                    // $("#txt_drawships_count").html(data.count);
+                }
+            });
+            canvasShips.addSelectedListener(function(ship){
+                //选中船监听
+                //  console.log('选中船只：'+ship.mmsi);
+                // console.log(ship);
+                // mmsi = ship.mmsi;
+                // showTeamBtn(mmsi);
+                // loadDetail(mmsi);
+                // loadIHS(mmsi);
+                // loadContact(mmsi);
+                // loadCurrVoyage(mmsi);
+                // $('.hide').show();
+            });
+
+            // console.log(ShipxyOptions); 
+
+            document.addEventListener('UniAppJSBridgeReady', function() {
+              uni.getEnv(function(res) {
+                    if(res.plus){
+                        baseUrl = plus.storage.getItem('globalUrl');
+                        customer_call = plus.storage.getItem('customer_call');
+                        // 导航栏手机适配
+                        var statusBarHeight = plus.navigator.getStatusbarHeight();
+                        $('.nav').css('top', statusBarHeight + 'px');
+                        $('.page-nav').css('paddingTop', statusBarHeight + 'px');
+                        token = plus.storage.getItem('loginToken').slice(7);
+                        
+                        // 当前手机定位图标
+                        var watchId, markerUser;
+                        if ( watchId ) {
+                        	return;
+                        }
+                        var marker_icon_1 = L.icon({
+                            iconUrl: "./img/markerUser.png",
+                            iconAnchor: [16, 16],
+                            iconSize: [24, 24]
+                        });
+                        markerUser = ShipxyAPI.marker([32.1, 122.11], {
+                            icon: marker_icon_1
+                        }).addTo(_map);
+                        
+                        // 实时坐标
+                        watchId = plus.geolocation.watchPosition( function ( resLocation ) {
+                            if ( !markerUser ) {
+                                return;
+                            }
+                            markerUser.setLatLng([resLocation.coords.latitude, resLocation.coords.longitude]);
+                        }, function ( errLocation ) {
+                            console.log("获取定位位置信息失败："+JSON.stringify(errLocation))
+                        }, {geocode:false} );
+                
+                        // 定位按钮
+                        $('.is_location').click(function(){
+                            plus.geolocation.getCurrentPosition( function ( resLocation ) {
+                                _map.setView([resLocation.coords.latitude, resLocation.coords.longitude], 8);
+                            }, function ( errLocation ) {
+                                console.log("获取定位位置信息失败："+JSON.stringify(errLocation))
+                            },{geocode:false});
+                        });
+
+                        toast.show = function (message){
+                            plus.nativeUI.toast(message);
+                        };
+
+                        toast.showWarn = function (message){
+                          plus.nativeUI.closeWaiting();
+                          plus.nativeUI.toast('<font style=\"font-size:14px\">加载失败<br/>' + message + '</font>', {type: 'richtext', verticalAlign: 'center', duration: 'long'});
+                        };
+
+                        toast.showConfirm = function (message, cfun, title = '', buttons = ["确定","取消"]){
+                            plus.nativeUI.confirm(message, cfun, {title: title, buttons: buttons, verticalAlign: "center"});
+                        };
+
+                        toast.showWaiting = function (message = '处理中，请等待...'){
+                            plus.nativeUI.showWaiting(message);
+                        };
+
+                        toast.closeWaiting = function (){
+                            plus.nativeUI.closeWaiting();
+                        };
+
+                        toast.concurrentCloseWaiting = function (i, num){
+                          if(i === num){
+                            plus.nativeUI.closeWaiting();
+                          }
+                        };
+                        
+                        plus.nativeUI.closeWaiting();
+                    }
+                });
+              //瓦片
+              ShipxyOptions.tiles.errorTileUrl = 'https://m.shipxy.com/img/erroshipxy.png';
+              ShipxyOptions.tiles.seaTileUrl = 'https://m12.shipxy.com/tile.c?l=Na&m=o&x={x}&y={y}&z={z}';
+              ShipxyOptions.tiles.googleTileUrl = 'https://mt2.google.cn/vt?lyrs=m@180000000&hl=zh-CN&gl=cn&src=app&x={x}&y={y}&z={z}&s=Gal';
+              ShipxyOptions.tiles.satelliteTileUrl = 'https://mt1.google.cn/vt?lyrs=y&hl=zh-CN&gl=CN&x={x}&y={y}&z={z}&s=Gal';
+              ShipxyOptions.tiles.shipxyTileUrl = 'https://g1.shipxy.com/tile.g?m=1&x={x}&y={y}&z={z}';
+              //url
+              ShipxyOptions.shipDataServer.seachShipStrUrl = baseUrl + 'api/v1/shipxy/search?mmsi={0}';
+              ShipxyOptions.shipDataServer.getShipInfoUrlShipxy = baseUrl + 'api/v1/shipxy/detail?u={{$uid}}&mmsi={0}';
+              ShipxyOptions.shipDataServer.getShipTrackUrl = baseUrl + 'api/v1/shipxy/history_track?mmsi={1}&btm={2}&etm={3}';
+              ShipxyOptions.shipDataServer.getGroupFleetUrl = baseUrl + 'api/v1/shipxy/team_fleet';
+              ShipxyOptions.shipDataServer.getPortofCallByShipUrl = baseUrl + 'api/v1/shipxy/history_voyage?mmsi={1}&btm={2}&etm={3}';
+              ShipxyOptions.shipDataServer.getShipVoyageUrl = baseUrl + 'api/v1/shipxy/voyage?mmsi={1}';
+              ShipxyOptions.shipDataServer.getManyShipInfoUrl = baseUrl + '/GetManyShip?k={k}&id={0}&enc=1&v=4';
+              ShipxyOptions.shipDataServer.getFleetShipsUrlShipxy = baseUrl + '/GetFleetShip?k={k}&enc=0&v=4';
+              ShipxyOptions.shipDataServer.getAreaShipsUrlShipxy = baseUrl + 'api/v1/shipxy/area?scode={1}&xy={2}&enc=0&v=4';
+              // ShipxyOptions.shipDataServer.getAreaShipsUrlShipxy = 'https://api.shipxy.com/apicall/GetAreaShip?k={k}&scode={1}&xy={2}&enc=0&v=4';
+              //气象url
+              ShipxyOptions.weather.yananUrl = baseUrl + 'api/v1/shipxy/weather?type=1';
+              ShipxyOptions.weather.jinhaiUrl = baseUrl + 'api/v1/shipxy/weather?type=2';
+              ShipxyOptions.weather.yuanhaiUrl = baseUrl + 'api/v1/shipxy/weather?type=3';
+              ShipxyOptions.weather.tidesGuoWaiUrl = baseUrl + 'api/v1/shipxy/tide';
+              ShipxyOptions.weather.tidesInfoGuoWaiUrl = baseUrl + 'api/v1/shipxy/tide_info?pid={0}&sdate={1}&edate={2}';
+              ShipxyOptions.weather.typhoonListUrl = baseUrl + 'api/v1/shipxy/typhoon';
+              ShipxyOptions.weather.typhoonInfoUrl = baseUrl + 'api/v1/shipxy/typhoon_info?tid={0}';
+              //港口
+              ShipxyOptions.portTiles.GETLATLNGDATA_URL = baseUrl + 'api/v1/shipxy/port?x={x}&y={y}&z={z}';
+              
+              // 导航栏返回按钮
+              $('.is_back').click(function(){
+                            uni.navigateBack();
+                        });
+
+              function pageClose() {
+                          $('.page').animate({left: '100%'},'fast',function(){
+                            $('.page').css('display', 'none');
+                          });
+                        }
+
+              // 页面关闭
+              $('.is_page_back').click(function(){
+                          pageClose();
+                        });
+
+              function _getScreen(){
+                toast.showWaiting();
+                getAjax('api/v1/shipxy/factor', {}, function(res){
+                  if(res.status === 1){
+                    let htmlStr = '';
+                    let length = res.data.length;
+                    for(let i = 0, len = length.length; i < len; i++){
+                      if(i == len -1){
+                        htmlStr += '<div class="page-tabbar-item is_screen_tabbar_item" data-type="length" data-value="' + length[i] + '">' + length[i] + '米以上</div>';
+                      }else{
+                        htmlStr += '<div class="page-tabbar-item is_screen_tabbar_item" data-type="length" data-value="' + length[i] + '">' + length[i] + '米</div>';
+                      }
+                    }
+                    document.getElementById('screen_length').innerHTML = htmlStr;
+                    let draught = res.data.draught;
+                    htmlStr = '';
+                    for(let i = 0, len = draught.length; i < len; i++){
+                      htmlStr += '<div class="page-tabbar-item is_screen_tabbar_item" data-type="draught" data-value="' + draught[i].id + '">' + draught[i].name + '</div>';
+                    }
+                    document.getElementById('screen_draught').innerHTML = htmlStr;
+                    let type = res.data.type;
+                    htmlStr = '<div class="page-tabbar-left">';
+                    for(let i = 0, len = type.length; i < len; i++){
+                      htmlStr += '<div class="page-tabbar-item ' + ( i === 0 ? 'active' : '') + '" data-type="type" data-value="' + type[i].id + '">' + type[i].name + '</div>';
+                    }
+                    htmlStr += '</div><div class="page-tabbar-right">';
+                    for(let i = 0, len = type.length; i < len; i++){
+                      htmlStr += '<div class="page-tabbar-list" data-type="type" data-childer="' + type[i].id + '" style="display:' + ( i === 0 ? 'block;' : 'none;' ) + '">';
+                      for(let j = 0, lenChilds = type[i].childs.length; j < lenChilds; j++){
+                        htmlStr += '<div class="page-tabbar-item is_screen_tabbar_item" data-type="type" data-value="' + type[i].childs[j].id + '">' + type[i].childs[j].name + '</div>';
+                      }
+                      htmlStr += '</div>';
+                    }
+                    document.getElementById('screen_type').innerHTML = htmlStr + '</div>';
+                    let port = res.data.port;
+                    let htmlStrLeft = '<div class="page-tabbar-left">';
+                    let htmlStrRight = '<div class="page-tabbar-right">';
+                    for(let i = 0, len = port.length, k = 0; i < len; i++){ // k = 可能不是列表第一位，显示有数据的第一位，。
+                      if(port[i].port.length > 0){
+                        let htmlStr = '<div class="page-tabbar-list" data-type="dest" data-childer="' + k + '" style="display:' + ( k === 0 ? 'block;' : 'none;' ) + '">';
+                        let n = 0;
+                        for(let j = 0, lenChilds = port[i].port.length; j < lenChilds; j++){
+                          if(!!port[i].port[j].nameEn){
+                            n++;
+                            htmlStr += '<div class="page-tabbar-item is_screen_tabbar_item" data-type="dest" data-value="' + port[i].port[j].id + '">' + port[i].port[j].name + '</div>';
+                          }
+                        }
+                        if(n != 0){
+                          htmlStrLeft += '<div class="page-tabbar-item ' + ( k === 0 ? 'active' : '') + '" data-type="dest" data-value="' + k + '">' + port[i].name + '</div>';
+                          htmlStrRight = htmlStrRight + htmlStr + '</div>';
+                        }
+                        k++;
+                      }
+                    }
+                    document.getElementById('screen_dest').innerHTML = htmlStrLeft + '</div>' + htmlStrRight + '</div>';
+                    toast.closeWaiting();
+                  }else{
+                    toast.showWarn(res.message);
+                  }
+                });
+              }
+
+              // 打开 筛选页面
+              $('.is_screen').click(function(){
+                $('#page_screen').css('display', 'flex');
+                $('#page_screen').animate({left: '0'},'fast');
+                if($('#screen_type').html() === ''){
+                  _getScreen();
+                }
+              });
+
+              // 筛选left点击
+              $('#screen_left>.page-tabbar-item').click(function(){
+                if(!$(this).hasClass('active')){
+                  $('#screen_left>.page-tabbar-item').removeClass('active');
+                  $(this).addClass('active');
+                  $('#screen_main>.is_screen_tabbar_list').css('display', 'none');
+                  let type = $(this).data('type');
+                  if(type === 'screen_type' || type === 'screen_dest'){
+                    $('#screen_main #' + type).css('display', 'flex');
+                  }else{
+                    $('#screen_main #' + type).css('display', 'block');
+                  }
+                }
+              });
+
+              // 筛选right切换
+              $('#screen_main').on('click', '.page-tabbar-list.is_screen_tabbar_list>.is_screen_tabbar_item', function(){
+                let type = $(this).data('type');
+                if($(this).hasClass('checked')){
+                  $('#screen_left .page-tabbar-item[data-type=screen_' + type + ']').removeClass('checked');
+                  $(this).removeClass('checked');
+                }else{
+                  $('#screen_left .page-tabbar-item.active').addClass('checked');
+                  $('#screen_' + type + ' .page-tabbar-item').removeClass('checked');
+                  $(this).addClass('checked');
+                }
+              });
+
+              // 筛选 type二级left点击
+              $('#screen_main').on('click', '.page-tabbar-left>.page-tabbar-item', function(){
+                if(!$(this).hasClass('active')){
+                  let type = $(this).data('type');
+                  let value = $(this).data('value');
+                  $('#screen_main>#screen_' + type + '>.page-tabbar-left>.page-tabbar-item.active').removeClass('active');
+                  $(this).addClass('active');
+                  $('#screen_main>#screen_' + type + '>.page-tabbar-right>.page-tabbar-list').css('display', 'none');
+                  $('#screen_main>#screen_' + type + '>.page-tabbar-right>.page-tabbar-list[data-childer=' + value + ']').css('display', 'block');
+                }
+              });
+
+              // 筛选 type二级right切换
+              $('#screen_main').on('click', '.page-tabbar>.page-tabbar-right>.page-tabbar-list>.is_screen_tabbar_item', function(){
+                let type = $(this).data('type');
+                if($(this).hasClass('checked')){
+                  $(this).removeClass('checked');
+                  if(!$(this).parent().children('.checked').length){
+                    let value = $(this).parent().data('childer');
+                    $('#screen_' + type + '>.page-tabbar-left>.page-tabbar-item[data-value=' + value + ']').removeClass('checked');
+                  }
+                  if(!$('#screen_' + type + '>.page-tabbar-left>.page-tabbar-item.checked').length){
+                    $('#screen_left .page-tabbar-item[data-type=screen_' + type + ']').removeClass('checked');
+                  }
+                }else{
+                  $('#screen_left .page-tabbar-item.active').addClass('checked');
+                  $('#screen_' + type + '>.page-tabbar-left>.page-tabbar-item.active').addClass('checked');
+                  $(this).addClass('checked');
+                }
+              });
+
+              // 到港时间选择
+              var dateRange1 = new pickerDateRange('date1', {
+                stopToday : true,
+                isTodayValid : true,
+                needCompare : false,
+                defaultText : '~',
+                autoSubmit : false,
+                inputTrigger : 'input_trigger1',
+                theme : 'ta',
+                success: function(res){
+                  if(res.startDate === ''){
+                    return;
+                  }
+                  if(!res.endDate || res.startDate === res.endDate){
+                    $('#date1').data('value', res.startDate + ' 00:00:00~');
+                    $('#date1').html(res.startDate);
+                  }else{
+                    $('#date1').data('value', res.startDate + ' 00:00:00~' + res.endDate + ' 23:59:59');
+                    $('#date1').html(res.startDate + '~' + res.endDate);
+                  }
+                  $('#screen_left>.page-tabbar-item[data-type=screen_eta]').addClass('checked');
+                }
+              });
+
+	
+
+              // 到港时间选择
+              // $('#screen_main>#screen_eta>.is_screen_input').click(function(){
+              //   let type = $(this).data('type');
+              //   let value = $(this).data('value');
+              //   let styles = {};
+              //   let time = ' 00:00:00';
+              //   if(value){
+              //     styles.date = new Date();
+              //     styles.date.setTime(value);
+              //   }
+              //   if(type === 'eta_min'){
+              //     value = $('#screen_eta .is_screen_input[data-type=eta_max]').data('value');
+              //     if(value){
+              //       styles.maxDate = new Date();
+              //       styles.maxDate.setTime(value);
+              //     }
+              //   }else{
+              //     time = ' 23:59:59'
+              //     value = $('#screen_eta .is_screen_input[data-type=eta_min]').data('value');
+              //     if(value){
+              //       styles.minDate = new Date();
+              //       styles.minDate.setTime(value);
+              //     }
+              //   }
+              //   plus.nativeUI.pickDate(function(e){
+              //     var d=e.date;
+              //     $('#screen_eta .is_screen_input[data-type=' + type + ']').data('value', d.getTime());
+              //     let date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+              //     $('#screen_' + type).html(date);
+              //     $('#screen_' + type).data('value', date + time);
+              //     $('#screen_left>.page-tabbar-item[data-type=screen_eta]').addClass('checked');
+              //   },function(){}, styles);
+              // });
+
+              // 吨位输入
+              $('#screen_deadweight input').bind('input', function(e){
+                let type = $(this).data('type');
+                let val = '';
+                if(e.target.value.length){
+                  $('#screen_left>.page-tabbar-item.active').addClass('checked');
+                }else{
+                  if(type === 'deadweight_min'){
+                    val = $('#screen_deadweight .page-item-field[data-type=deadweight_max]').val();
+                  }else{
+                    val = $('#screen_deadweight .page-item-field[data-type=deadweight_min]').val();
+                  }
+                  if(val === ''){
+                    $('#screen_left>.page-tabbar-item[data-type=screen_deadweight]').removeClass('checked');
+                  }
+                }
+              });
+              
+              // 吨位输入错误范围
+              $('#screen_deadweight input').bind('blur', function(e){
+                let min = $('#screen_deadweight_min').val();
+                let max = $('#screen_deadweight_max').val();
+                if(min !== '' && max !== '' && parseInt(min) > parseInt(max)){
+                  toast.show('请输入正确吨位范围');
+                  $(e.target).val('');
+                }
+              });
+
+              // 筛选确认
+              $('.is_screen_confirm').click(function(){
+                let type = [], val = [];
+                if($('#screen_left>.page-tabbar-item[data-type=screen_deadweight]').hasClass('checked')){
+                  let min = $('#screen_deadweight_min').val();
+                  let max = $('#screen_deadweight_max').val();
+                  type.push('deadweight');
+                  val.push(min + '-' + max);
+                }
+                if($('#screen_left>.page-tabbar-item[data-type=screen_eta]').hasClass('checked')){
+                  let date = $('#date1').data('value');
+                  type.push('eta');
+                  val.push(date);
+                }
+                let obj = $('#screen_main .is_screen_tabbar_item.checked');
+                for(let i = 0, len = obj.length; i < len; i++){
+                  type.push($(obj[i]).data('type'));
+                  val.push($(obj[i]).data('value'));
+                }
+                if(!type.length){
+                  toast.show('当前没有选择筛选条件！')
+                  // 关闭当前
+                  pageClose();
+                  return;
+                }
+                searchType = type;
+                searchVal = val;
+                searchLast = 1;
+                lastMore = 'more';
+                      $('#page_search .page-main').scrollTop(0);
+                $('#search-input').val('');
+                $('#searchData').html('');
+                $('#searchSize').html('0');
+                _getShipData();
+              });
+
+              function screenReset(){
+                $('#page_screen .checked').removeClass('checked');
+                $('#screen_deadweight .page-item-field').val('');
+                $('#screen_eta>.is_screen_input').data('value', '');
+                $('#screen_eta>.is_screen_input>.page-item-field-placeholder').data('value', '');
+                $('#screen_eta>.is_screen_input>.page-item-field-placeholder').html('点击输入');
+              }
+              
+              // 筛选重置
+              $('.is_screen_reset').click(function(){
+                screenReset();
+                $('#search-input').val('');
+                $('#searchData').html('');
+                $('#searchSize').html('0');
+                $('#page_search .page-info').css('display', 'none');
+              });
+
+              // 打开 查询页面
+              $('.is_search').click(function(){
+                          $('#page_search').css('display', 'flex');
+                          $('#page_search').animate({left: '0'},'fast', function() {
+                            if(!$('#searchData').html()){
+                              $('#search-input').focus();
+                            }
+                          });
+                        });
+
+              // 搜索导航栏搜索功能
+              $('#search-input').on('input', function(e) {
+                          if(!e.delegateTarget.value.length){
+                            searchType = 'ship';
+                            searchVal = e.delegateTarget.value;
+                            $('#searchData').html('');
+                            $('#searchSize').html('0');
+                          }else{
+                            screenReset();
+                            searchType = 'ship';
+                            searchLast = 1;
+                            lastMore = 'more';
+                            searchVal = e.delegateTarget.value;
+                            _debounceShipData();
+                          }
+                        });
+
+              var _debounceShipData = debounce(_getShipData, 2000);
+
+              $('#page_search .page-main').scroll(function(){
+                          // console.log($(this)[0].scrollTop + $(this).height() >= $(this)[0].scrollHeight - 50);
+                          if(lastMore === 'more' && $(this)[0].scrollTop + $(this).height() >= $(this)[0].scrollHeight - 50){
+                            lastMore = 'loading';
+                            _getShipData();
+                          }
+                        });
+              
+              function _getShipData() {
+                if(searchType == 'ship' && searchVal == ''){
+                  return;
+                }
+                toast.showWaiting();
+                getAjax('api/v1/shipxy/search', {type: JSON.stringify(searchType) , mmsi: JSON.stringify(searchVal), last: searchLast}, function(res){
+                  if(res.status === 0){
+                    let len = res.data.length;
+                    let htmlStr = '';
+                    for(let i = 0; i < len; i++){
+                      htmlStr += '<div class="page-item page-item-right" data-id="' + res.data[i].id + '" data-mmsi="' + res.data[i].mmsi + '" data-name_en="' + res.data[i].nameEn + '" data-name_cn="' + res.data[i].nameCn + '" data-type_na="' + res.data[i].shipType + '" data-weight="' + res.data[i].deadWeight + '">\
+                        <div class="page-item-title"><div class="page-item-ellipsis">' + res.data[i].nameCn + '_' + res.data[i].nameEn + '</div><div class="page-item-helper' + (res.data[i].draughtStatusStr === '未知' ? ' page-item-helper-disbale' : (res.data[i].draughtStatusStr === '满载' ? ' page-item-helper-full' : '')) + '">' + res.data[i].draughtStatusStr + '</div></div><div class="page-item-content"><div class="page-item-col"><span>MMSI：' + res.data[i].mmsi + '</span><span class="page-item-ellipsis">目的地：' + res.data[i].dest + '</span></div><div class="page-item-col"><span class="page-item-ellipsis">类型/载重：' + res.data[i].shipType + '/' + res.data[i].deadWeight + 'T</span><span>预抵时间：' + res.data[i].eta + '</span></div></div></div>';
+                    }
+                    if(searchLast === 1){
+                      document.getElementById('searchData').innerHTML = htmlStr;
+                      document.getElementById('searchSize').innerText = res.total_count;
+                      $('#page_search .page-info').css('display', 'block');
+                      setTimeout(function(){
+                        $('#page_search .page-main').scrollTop(0);
+                      },0);
+                      // 用于筛选打开查询页
+                      $('#page_search').css('display', 'flex');
+                      $('#page_search').animate({left: '0'},'fast');
+                    }else{
+                      document.getElementById('searchData').innerHTML += htmlStr;
+                      document.getElementById('searchSize').innerText = parseInt(document.getElementById('searchSize').innerText) + res.total_count;
+                    }
+                    searchLast++;
+                    if(len < 20){
+                      lastMore = 'noMore';
+                    }else{
+                      lastMore = 'more';
+                    }
+                    toast.closeWaiting();
+                  }else{
+                    toast.showWarn(res.message);
+                  }
+                });
+              }
+              
+              // 添加船队船到地图
+              function _mapAddShip(obj){
+                          var fleetships = [];
+                          //进行处理
+                          obj.shiptype = 2;
+                          obj.istop = true;
+                          obj.color = "yellow";
+                          obj.cog = obj.cog / 100;
+                          obj.hdg = obj.hdg / 100;
+                          obj.sog = obj.sog / 100;
+                          fleetships.push(obj);
+                          // 添加船队船到地图
+        // console.log(_map.shipsService);
+                          _map.shipsService.addFleetShips(fleetships);
+                        }
+
+              var lng = 0, lat = 0;
+              function _openShipDetail(obj){
+                          toast.showWaiting();
+                          let i = 0;
+                          mmsi = $(obj).attr('data-mmsi');
+                          let name_en = $(obj).attr('data-name_en');
+                          let name_cn = $(obj).attr('data-name_cn');
+                          let weight = $(obj).attr('data-weight');
+                          let type_na = $(obj).attr('data-type_na');
+                          // 清空详情页
+                          $('#page_about .page-main>div').html('');
+                          // 关闭当前
+                          pageClose();
+                          // 弹出底部
+                          $('.foot').css('display', 'flex');
+                          $('.foot').animate({bottom: '0'},'fast');
+
+                          postAjax('api/v1/shipxy/basis', {mmsi: mmsi}, function(res){
+                            if(res.status === 1){
+                              $('#page_about .page-nav-title').html(res.data.nameCn + '_' + res.data.nameEn);
+                              let htmlStr = res.data.nameCn + '_' + res.data.nameEn + '<div class="foot-note">MMSI：' + mmsi + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类型/载重：' + res.data.shipType + '/' + res.data.DWT + 'T</div>';
+                              document.getElementById('foot_info').innerHTML = htmlStr;
+                              if(res.data.openPhone === "1"){
+                                $('#foot-phone-txt').html('联系船主');
+                                $('#foot-phone').data('value', '1');
+                              }else{
+                                $('#foot-phone-txt').html('联系平台');
+                                $('#foot-phone').data('value', '0');
+                              }
+                            }else{
+                              toast.showWarn(res.message);
+                            }
+                            i++;
+                            toast.concurrentCloseWaiting(i, 4);
+                          });
+
+                          postAjax('api/v1/shipxy/voyage', {mmsi: mmsi}, function(res){
+                            if(res.status === 0){
+                              let htmlStr = '';
+                              if(!!res.data){
+                                let timeStart = res.data.deptime.substring(5, 16);
+                                let timeEnd = res.data.time.substring(5, 16);
+                                htmlStr = '<div class="sail-cell"><div class="sail-port">' + res.data.depportname_cn + '</div><div class="sail-time">起航:' + timeStart + '</div></div><div class="sail-helper">\
+                                <div class="sail-img sail-img2">在航:' + res.data.sog2 + '节</div></div><div class="sail-cell"><div class="sail-port">' + res.data.destportname_cn + '</div><div class="sail-time">预抵:' + timeEnd + '</div></div>';
+                              }else{
+                                htmlStr = '<div class="sail-cell"><div class="sail-port">当前暂无航次信息</div></div>';
+                              }
+                              document.getElementById('foot_voyage').innerHTML = htmlStr;
+                            }else{
+                              toast.showWarn(res.message);
+                            }
+                            i++;
+                            toast.concurrentCloseWaiting(i, 4);
+                          });
+
+                          postAjax('api/v1/shipxy/follow_status', {mmsi: mmsi}, function(res){
+                            if(res.status === 1){
+                              if(res.data.follow_status === 0){
+                                $('#foot-attention').removeClass('active')
+                                $('#foot-attention-txt').html('关注');
+                              }else{
+                                $('#foot-attention').addClass('active');
+                                $('#foot-attention-txt').html('已关注');
+                              }
+                            }else{
+                              toast.showWarn(res.message);
+                            }
+                            i++;
+                            toast.concurrentCloseWaiting(i, 4);
+                          });
+
+                          postAjax('api/v1/shipxy/detail', {mmsi: mmsi}, function(res){
+                            if(res.status === 0){
+                              let lastdyn = new Date(res.data[0].lastdyn*1000).Format("yyyy/MM/dd HH:mm");
+                              lng = res.data[0].lng = res.data[0].lon/1000000;
+                              lat = res.data[0].lat = res.data[0].lat/1000000;
+                              let htmlStr = '<div class="page-item page-item-info"><div class="page-item-label">更新时间</div><div class="page-item-note">' + lastdyn + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">MMSI</div><div class="page-item-note">' + res.data[0].mmsi + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">呼号</div><div class="page-item-note">' + res.data[0].callsign + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">IMO</div><div class="page-item-note">' + res.data[0].imo + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">状态</div><div class="page-item-note">' + res.data[0].navistatus + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">目的地</div><div class="page-item-note">' + res.data[0].dest + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">预抵时间</div><div class="page-item-note">' + res.data[0].eta + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">经度</div><div class="page-item-note">' + lng + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">纬度</div><div class="page-item-note">' + lat + '</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">航速</div><div class="page-item-note">' + res.data[0].sog + '节</div></div>\
+                                <div class="page-item page-item-info"><div class="page-item-label">航迹向</div><div class="page-item-note">' + res.data[0].cog + '度</div></div>';
+                              document.getElementById('page_about_info').innerHTML = htmlStr;
+                              $('#page_about .page-tabs-cell').removeClass('active');
+                              $('#page_about .page-tabs-cell:first-child').addClass('active')
+                              $('#page_about .page-list').css('display', 'none');
+                              $('#page_about #page_about_info').css('display', 'flex');
+                              _map.setView([lat, lng]);
+                              _mapAddShip(res.data[0]);
+                            }else{
+                              toast.showWarn(res.message);
+                            }
+                            i++;
+                            toast.concurrentCloseWaiting(i, 4);
+                          });
+                        }
+
+              // 打开 船舶页面
+              $('#page_search, #page_attention').on('click', '.page-item', function(){
+                          _openShipDetail(this);
+                        });
+
+              // 船舶页面关闭
+              $('.foot').on('click', '.is_foot_close', function(){
+                          _map.shipsService.removeAllShips();
+                          _map.trackService.removeAll();
+                          $('.foot').animate({bottom: '-50%'},'fast',function(){
+                            $('.foot').css('display', 'none');
+                          });
+                          if($('#foot-truck').hasClass('active')){
+                            $('.foot-truck').removeClass('active')
+                            $('#foot-truck').removeClass('active')
+                          }
+                        });
+
+              // 打开 船舶详情页面
+              $('#foot-about').click(function(){
+                          let pageAbout = $('#page_about');
+                          pageAbout.css('display', 'flex');
+                          pageAbout.animate({left: '0'},'fast');
+                        });
+
+              // 船舶详情tabs切换
+              $('#page_about .page-tabs-cell').click(function(){
+                          $('#page_about .page-tabs-cell').removeClass('active');
+                          $(this).addClass('active');
+                          $('#page_about .page-main>div').css('display', 'none');
+                          let type = $(this).data('type');
+                          $('#page_about #page_about_' + type).css('display', 'flex');
+                          let content = $('#page_about #page_about_' + type + '.page-list');
+                          if(content.html() === ''){
+                            toast.showWaiting();
+                            if(type === 'archives'){
+                              // 船舶档案
+                              postAjax('api/v1/shipxy/ihs', {mmsi: mmsi}, function(res){
+                                  if(res.status === 0){
+                                    let htmlStr = '<div class="page-item page-item-info"><div class="page-item-label">船名</div><div class="page-item-note">' + res.data.ShipName + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">MMSI</div><div class="page-item-note">' + res.data.MMSI + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">类型</div><div class="page-item-note">' + res.data.ShipType + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">船籍</div><div class="page-item-note">' + res.data.FlagCountry + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">船长</div><div class="page-item-note">' + res.data.MouldLength + '米</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">船宽</div><div class="page-item-note">' + res.data.MouldWidth + '米</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">总吨</div><div class="page-item-note">' + res.data.GT + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">净吨</div><div class="page-item-note">' + res.data.NT + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">载重吨</div><div class="page-item-note">' + res.data.DWT + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">最大吃水</div><div class="page-item-note">' + res.data.Draught + '</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">建造时间</div><div class="page-item-note">' + res.data.BuildDate + '</div></div>';
+                                    document.getElementById('page_about_archives').innerHTML = htmlStr;
+                                    toast.closeWaiting();
+                                  }else{
+                                    toast.showWarn(res.message);
+                                  }
+                              });
+                            }else if(type === 'history'){
+                              // 历史页面
+                              let dateNew = new Date();
+                              let dateOld = new Date();
+                              dateOld.setDate(dateNew.getDate() - 30);
+                              let etm = Math.round(dateNew.getTime()/1000);
+                              let btm = Math.round(dateOld.getTime()/1000);
+                              getAjax('api/v1/shipxy/history_voyage', {mmsi: mmsi, btm: btm, etm: etm}, function(res){
+                                  if(res.status === 0){
+                                    let htmlStr = '<div class="page-info">近一个月共有<span class="red">' + res.data.length + '</span>次航次记录</div><div class="page-list">';
+                                    for(let i = 0, len = res.data.length; i < len; i++){
+                                      htmlStr += '<div class="page-item sail" data-btime="' + (res.data[i].ATD ? res.data[i].ATD : res.data[i].ATB) + '" data-etime="' + (i - 1 >= 0 ? res.data[i - 1].ATA : '') + '"><div class="sail-cell"><div class="sail-port">' + res.data[i].Port + '</div><div class="sail-time">' + (res.data[i].ATD ? res.data[i].ATD : res.data[i].ATB) + '</div></div><div class="sail-helper"><div class="sail-img"></div></div><div class="sail-cell">\
+                                        <div class="sail-port">' + (i - 1 >= 0 ? res.data[i - 1].Port : '未知') + '</div><div class="sail-time">' + (i - 1 >= 0 ? res.data[i - 1].ATA : '未知') + '</div></div></div>';
+                                    }
+                                    htmlStr += '</div>';
+                                    document.getElementById('page_about_history').innerHTML = htmlStr;
+                                    toast.closeWaiting();
+                                  }else{
+                                    toast.showWarn(res.message);
+                                  }
+                              });
+                            }else if(type === 'meteorological'){
+                              // 海洋气象
+                              postAjax('api/v1/shipxy/gow', {mmsi: mmsi, lat: lat, lng: lng}, function(res){
+                                  if(res.status === 0){
+                                    let htmlStr = '<div class="page-item page-item-info"><div class="page-item-label">风速</div><div class="page-item-note">' + res.data.windspeed + '米/秒</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">浪高</div><div class="page-item-note">' + res.data.swellheight + '米</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">涌向</div><div class="page-item-note">' + res.data.swelldir + '度</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">温度</div><div class="page-item-note">' + res.data.temperature + '℃</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">压强</div><div class="page-item-note">' + res.data.pressure + 'hPa</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">风向</div><div class="page-item-note">' + res.data.winddir + '度</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">涌高</div><div class="page-item-note">' + res.data.waveheight + '米</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">涌周期</div><div class="page-item-note">' + res.data.swellperiod + '秒</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">湿度</div><div class="page-item-note">' + res.data.humidity + '%</div></div>\
+                                      <div class="page-item page-item-info"><div class="page-item-label">能见度</div><div class="page-item-note">' + res.data.visibility + '千米</div></div>';
+                                    document.getElementById('page_about_meteorological').innerHTML = htmlStr;
+                                    toast.closeWaiting();
+                                  }else{
+                                    toast.showWarn(res.message);
+                                  }
+                              });
+                            }
+                          }
+                        });
+
+              // 船舶关注按钮
+              $('#foot-attention').click(function(){
+                          toast.showWaiting();
+                          let dom = $(this)
+                          if(dom.hasClass('active')){
+                            postAjax('api/v1/shipxy/follow_remove', {mmsi: mmsi}, function(res){
+                              if(res.status === 1){
+                                dom.removeClass('active');
+                                $('#foot-attention-txt').html('关注');
+                                toast.closeWaiting();
+                              }else{
+                                toast.showWarn(res.message);
+                              }
+                            });
+                          }else{
+                            postAjax('api/v1/shipxy/follow_add', {mmsi: mmsi}, function(res){
+                              if(res.status === 1){
+                                dom.addClass('active')
+                                $('#foot-attention-txt').html('已关注');
+                                toast.closeWaiting();
+                              }else{
+                                toast.showWarn(res.message);
+                              }
+                            });
+                          }
+                        });
+
+              // 历史轨迹详细
+              $('#page_about_history').on('click', '.page-item', function(){
+                          var btime = $(this).data('btime');
+                          var etime = $(this).data('etime');
+                          if(btime && etime){
+                            toast.showWaiting();
+                            _map.trackService.removeAll();
+                            btime = Date.parse(btime) / 1000;
+                            etime = Date.parse(etime) / 1000;
+                            _map.trackService.addAndShowByUrl(mmsi, btime, etime);
+                            toast.closeWaiting();
+                            pageClose();
+                          }else{
+                            toast.show('当前记录无法查看!');
+                          }
+                        });
+
+              function _track(days){
+                          //清空轨迹
+                          _map.trackService.removeAll();
+                          if(days>0){
+                                toast.showWaiting();
+                                var bDay = new Date();
+                                var eDay = new Date();
+                                bDay.setDate(eDay.getDate() - days);
+                                var btime = Math.round(bDay.getTime()/1000);
+                                var etime = Math.round(eDay.getTime()/1000);
+                                var options = {
+                                    lineColor: 'tomato',// 线，颜色
+                                    lineWeight: 2, // 线，粗细
+                                    dash: true, // 是否为虚线
+                                    dashArray: [5, 5],// 虚线间隔
+                                    circleOverColor: 'yellow',// 轨迹点,鼠标划过时颜色
+                                    isDilute: true, // 是否抽稀模式显示
+                                };
+                                _map.trackService.addAndShowByUrl(mmsi, btime, etime, options);
+                                toast.closeWaiting();
+                            }
+                        }
+
+              // 轨迹
+              $('#foot-truck').click(function(){
+                          if($(this).hasClass('active')){
+                            //清空轨迹
+                            _map.trackService.removeAll();
+                            $('.foot-truck').removeClass('active')
+                            $(this).removeClass('active')
+                          }else{
+                            $('.foot-truck-item').removeClass('active');
+                            $('.foot-truck-item:first-child').addClass('active');
+                            $('.foot-truck').addClass('active')
+                            $(this).addClass('active')
+                            _track(7);
+                          }
+                        });
+
+              $('.foot-truck-item').click(function(){
+                          $('.foot-truck-item').removeClass('active');
+                          $(this).addClass('active');
+                          let days = $(this).data('day');
+                          _track(days);
+                        });
+
+              // 拨打电话
+              $('#foot-phone').click(function(){
+                          if($(this).data('value') === '1'){
+                            toast.showWaiting();
+                            postAjax('api/v1/shipxy/contact', {mmsi: mmsi}, function(res){
+                              if(res.status === 1){
+                                toast.closeWaiting();
+                                toast.showConfirm('联系方式：' + res.data.contact + '/' + res.data.phone + '\n平台无法保证所有的用户信息的准确性，电话洽谈时，请提高防范意识，谨防诈骗！', function(resConfirm){
+                                  if(resConfirm.index == 0){
+                                      plus.device.dial(res.data.phone);
+                                  }
+                                },'温馨提示' , ["立即拨打", "取消"]);
+                              }else if(res.status == 401){
+                                toast.closeWaiting();
+                                toast.showConfirm(res.message, function(resConfirm){
+                                    if(resConfirm.index == 0){
+                                        uni.switchTab({
+                                            url: '/pages/tabBar/profile/profile'
+                                        });
+                                    }
+                                });
+                              }else{
+                                toast.showWarn(res.message);
+                              }
+                            });
+                          }else{
+                            toast.showConfirm('运有方客服电话：' + customer_call + '\n暂无该船主的联系方式，您可以联系平台客服，客服人员将竭诚为您服务！', function(resConfirm){
+                              if(resConfirm.index == 0){
+                                  plus.device.dial(customer_call);
+                              }
+                            },'温馨提示' , ["立即拨打", "取消"]);
+                          }
+                        });
+
+              // 图源主题切换
+              var popupChart = $('#popup-chart');
+              $('.btn-chart').click(function(){
+                          $(this).addClass('active');
+                          popupChart.css('display', 'block');
+                          popupChart.animate({opacity: 1});
+                        });
+
+              $('#popup-chart-mask').click(function(){
+                          $('.btn-chart').removeClass('active')
+                          popupChart.animate({opacity: 0},'fast',function(){
+                            popupChart.css('display', 'none');
+                          });
+                        });
+
+              // 切换图源
+              $(".chart-cell").on("click", function () {
+                            var map = $(this).attr('data-map');
+                            $(".chart-cell").removeClass('active');
+                            $(this).addClass('active');
+                            $('.btn-chart').removeClass('active');
+                            $('.btn-chart').html($(this).attr('data-txt'));
+                            _map.basemapsControl.changeMap(map);
+                            popupChart.animate({opacity: 0},'fast',function(){
+                              popupChart.css('display', 'none');
+                            });
+                        });
+
+              function _getTeamOrFollow(obj){
+                let load = obj.data('load');
+                let type = obj.data('type');
+                $('#page_attention .page-tabs-cell').removeClass('active');
+                obj.addClass('active');
+                $('#page_attention .page-list').css('display', 'none');
+                $('#page_attention #page_attention_' + type).css('display', 'flex');
+                if(load == 0 && !myAttention.length){
+                  toast.showWaiting();
+                  // 船舶档案
+                  postAjax('api/v1/shipxy/follow', {}, function(res){
+                      if(res.status === 0){
+                        myAttention = res.data;
+                        let htmlStr = '';
+                        for(let i = 0, len = myAttention.length; i < len; i++){
+                          htmlStr += '<div class="page-item page-item-right" data-id="' + myAttention[i].id + '" data-mmsi="' + myAttention[i].mmsi + '" data-name_en="' + myAttention[i].nameEn + '" data-name_cn="' + myAttention[i].nameCn + '" data-type_na="' + myAttention[i].shipType + '" data-weight="' + myAttention[i].deadWeight + '">\
+                            <div class="page-item-title"><div class="page-item-ellipsis">' + myAttention[i].nameCn + '_' + myAttention[i].nameEn + '</div><div class="page-item-helper' + (myAttention[i].draughtStatusStr === '未知' ? ' page-item-helper-disbale' : (myAttention[i].draughtStatusStr === '满载' ? ' page-item-helper-full' : '')) + '">' + myAttention[i].draughtStatusStr + '</div></div><div class="page-item-content"><div class="page-item-col"><span>MMSI：' + myAttention[i].mmsi + '</span><span class="page-item-ellipsis">目的地：' + myAttention[i].dest + '</span></div><div class="page-item-col"><span class="page-item-ellipsis">类型/载重：' + myAttention[i].shipType + '/' + myAttention[i].deadWeight + 'T</span><span>预抵时间：' + myAttention[i].eta + '</span></div></div></div>';
+                        }
+                        document.getElementById('page_attention_follow').innerHTML = htmlStr;
+                        toast.closeWaiting();
+                      }else{
+                        toast.showWarn(res.message);
+                      }
+                  });
+                }else if(load == 1 && !myShip.length){
+                  toast.showWaiting();
+                  postAjax('api/v1/shipxy/team_fleet', {}, function(res){
+                    if(res.status === 0){
+                      myShip = res.data;
+                      let htmlStr = '';
+                      for(let i = 0, len = myShip.length; i < len; i++){
+                        htmlStr += '<div class="page-item page-item-right" data-id="' + myShip[i].id + '" data-mmsi="' + myShip[i].mmsi + '" data-name_en="' + myShip[i].nameEn + '" data-name_cn="' + myShip[i].nameCn + '" data-type_na="' + myShip[i].shipType + '" data-weight="' + myShip[i].deadWeight + '">\
+                          <div class="page-item-title"><div class="page-item-ellipsis">' + myShip[i].nameCn + '_' + myShip[i].nameEn + '</div><div class="page-item-helper' + (myShip[i].draughtStatusStr === '未知' ? ' page-item-helper-disbale' : (myShip[i].draughtStatusStr === '满载' ? ' page-item-helper-full' : '')) + '">' + myShip[i].draughtStatusStr + '</div></div><div class="page-item-content"><div class="page-item-col"><span>MMSI：' + myShip[i].mmsi + '</span><span class="page-item-ellipsis">目的地：' + myShip[i].dest + '</span></div><div class="page-item-col"><span class="page-item-ellipsis">类型/载重：' + myShip[i].shipType + '/' + myShip[i].deadWeight + 'T</span><span>预抵时间：' + myShip[i].eta + '</span></div></div></div>';
+                      }
+                      document.getElementById('page_attention_team').innerHTML = htmlStr;
+                      toast.closeWaiting();
+                    }else{
+                      toast.showWarn(res.message);
+                    }
+                  });
+                }
+              }
+
+              // 打开 关注页面
+              var myAttention = [], myShip = [];
+              $('.btn-attention').click(function(){
+                $('#page_attention').css('display', 'flex');
+                $('#page_attention').animate({left: '0'},'fast');
+                myAttention = [];
+                myShip = [];
+                let obj = $('#page_attention>.page-tabs>.page-tabs-cell.active');
+                _getTeamOrFollow(obj);
+              });
+
+              // 关注页面tabs切换
+              $('#page_attention .page-tabs-cell').click(function(){
+                let obj = $(this);
+                _getTeamOrFollow(obj);
+              });
+
+              // 台风
+              var typhoonYear;
+              $('.btn-typhoon').click(function(e){
+                          e.stopPropagation();
+                          $(this).addClass('active');
+                          if($('#popup-typhoon .typhoon-left').html() === ''){
+                            // 显示
+                            _map.weatherService.showTyphoonInfoList(function () {
+                              console.log("showTyphoonInfoList is close!")
+                            });
+                            toast.showWaiting();
+                            getAjax('api/v1/shipxy/typhoon', {}, function(res){
+                                if(res.status === 0){
+                                  let typhoonData = {}, leftStr = '', rightStr = '';
+                                  for(let i = 0, len = res.data.length; i < len; i++){
+                                    typhoonYear = res.data[i].currentyear;
+                                    if(typhoonData.hasOwnProperty(typhoonYear)){
+                                      typhoonData[typhoonYear].unshift(res.data[i]);
+                                      rightStr = '<div class="typhoon-item" data-id="' + res.data[i].id + '" data-year="' + typhoonYear + '" style="display: none;">' + res.data[i].chnname + '(' + res.data[i].enname + ')</div>' + rightStr;
+                                    }else{
+                                      typhoonData[typhoonYear] = [];
+                                      typhoonData[typhoonYear].unshift(res.data[i]);
+                                      leftStr = '<div class="typhoon-item" data-year="' + typhoonYear + '">' + typhoonYear + '</div>' + leftStr;
+                                      rightStr = '<div class="typhoon-item" data-id="' + res.data[i].id + '" data-year="' + typhoonYear + '" style="display: none;">' + res.data[i].chnname + '(' + res.data[i].enname + ')</div>' + rightStr;
+                                    }
+                                  }
+                                  $('#popup-typhoon .typhoon-left').html(leftStr);
+                                  $('#popup-typhoon .typhoon-right').html(rightStr);
+                                  typhoonShow();
+                                  toast.closeWaiting();
+                                }else{
+                                  toast.showWarn(res.message);
+                                }
+                            });
+                          }else{
+                            typhoonShow();
+                          }
+                        });
+
+              // 台风切换年份
+              $('#popup-typhoon .typhoon-left').on('click', '.typhoon-item', function(){
+                          typhoonYear = $(this).data('year');
+                          $('#popup-typhoon .typhoon-left .typhoon-item').removeClass('active');
+                          $('#popup-typhoon .typhoon-left .typhoon-item[data-year=' + typhoonYear + ']').addClass('active');
+                          $('#popup-typhoon .typhoon-right .typhoon-item').css('display', 'none');
+                          $('#popup-typhoon .typhoon-right .typhoon-item[data-year=' + typhoonYear + ']').css('display', 'block');
+                          $('#popup-typhoon .typhoon-right').scrollTop(0);
+                          // 改船讯网控件参数
+                          $('#typhoonListWin1 .yearList select').val('year_' + typhoonYear).trigger('change');
+                        });
+
+              // 地图添加台风
+              $("#popup-typhoon .typhoon-right").on("click", '.typhoon-item', function (e) {
+                          let id = $(this).data('id');
+                          // 改船讯网控件参数
+                          let obj = $('#typhoonList .typhLi input[value=' + id + ']');
+                          obj.click();
+                          if(obj.prop('checked')){
+                            $(this).addClass('active');
+                          }else{
+                            $(this).removeClass('active');
+                          }
+                        });
+
+              // 台风重置
+              $('.is_typhoon_reset').click(function(){
+                          $('#popup-typhoon .typhoon-left .typhoon-item:first-child').click();
+                          $('#popup-typhoon .typhoon-right .typhoon-item').removeClass('active');
+                          _map.weatherService.showTyphoonInfoList(function () {
+                            console.log("showTyphoonInfoList is close!")
+                          });
+                        });
+
+              // 关闭台风
+              $('.is_typhoon_close').click(function(){
+                          typhoonHide();
+                        });
+
+              // 显示台风
+              function typhoonShow(){
+                          $('#popup-typhoon .typhoon-left .typhoon-item').removeClass('active');
+                          $('#popup-typhoon .typhoon-left .typhoon-item[data-year=' + typhoonYear + ']').addClass('active');
+                          $('#popup-typhoon .typhoon-right .typhoon-item[data-year=' + typhoonYear + ']').css('display', 'block');
+                          $('#popup-typhoon').css('display', 'block');
+                          $('#popup-typhoon').animate({opacity: 1});
+                        }
+
+              // 隐藏台风
+              function typhoonHide(){
+                          $('.btn-typhoon').removeClass('active')
+                          $('#popup-typhoon').animate({opacity: 0},'fast',function(){
+                            $('#popup-typhoon').css('display', 'none');
+                          });
+                        }
+
+              // 自定义按钮-测距
+              $(".btn-range").on("click", function (e) {
+                          $(this).hasClass('active') ? $(this).removeClass('active') : $(this).addClass('active');
+                            e.stopPropagation();
+                            _map.PolylineMeasureControl._toggleMeasure();
+                        });
+              
+              // 打开 设置页面
+              var pageSet = $('#page_set');
+              $('.btn-setting').click(function(){
+                          pageSet.css('display', 'flex');
+                          pageSet.animate({left: '0'},'fast');
+                        });
+
+              // 潮汐
+              $("#switch_chaoxi").on("click", function (e) {
+                            e.stopPropagation();
+                            if ($(this).hasClass('active')) {
+                                $(this).removeClass('active');
+                                _map.weatherService.hideTides();
+                            } else {
+                                // 显示
+                                $(this).addClass('active');
+                                _map.weatherService.showTides();
+                            }
+                        });
+              
+              // 海区预报
+              $("#switch_haiquyubao").on("click", function (e) {
+                            e.stopPropagation();
+                            if($(this).hasClass('active')){
+                              $(this).removeClass('active')
+                              _map.weatherService.hideSeaAreaForecasts();
+                            } else {
+                              // 显示
+                              $(this).addClass('active')
+                              _map.weatherService.showSeaAreaForecasts();
+                            }
+                        });
+
+              // 显示港口
+              var portDataSymbol = ShipxyAPI.portDataSymbol(_map);
+              $('#switch_port').click(function(){
+                          if($(this).hasClass('active')){
+                            $(this).removeClass('active')
+                            portDataSymbol.hide();
+                          }else{
+                            $(this).addClass('active')
+                            portDataSymbol.show();
+                          }
+                        });
+
+            });
+        </script>
+
+    </body>
+</html>

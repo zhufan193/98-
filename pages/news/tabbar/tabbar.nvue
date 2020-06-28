@@ -1,0 +1,183 @@
+<template>
+    <div class="page">
+        <uni-tabs @change="changeTab" :index="tabIndex">
+            <uni-tab-bar :drag="true" :tab-bars="tabBars" :tab-index="tabIndex"></uni-tab-bar>
+            <uni-tab-content>
+                <list class="list" @loadmore="getData" loadmoreoffset="10" v-for="(tab, index1) in tabBars" :key="index1">
+                    <refresh class="refresh" @refresh="onrefresh" @pullingdown="onpullingdown" :display="refreshing ? 'show' : 'hide'">
+                        <text class="refresh-text">{{ refreshText }}</text>
+                    </refresh>
+                    <cell v-for="(newsitem, index2) in tab.data" :key="index2">
+                        <uni-media-list :data="newsitem" @click="goDetail(newsitem)"></uni-media-list>
+                    </cell>
+                    <cell class="loadmore">
+                        <text class="loadmore-text">{{ loadingText[tab.loadingType] }}</text>
+                    </cell>
+                </list>
+            </uni-tab-content>
+        </uni-tabs>
+    </div>
+</template>
+
+<script>
+    import uniTabContent from '@/components/tab-nvue/tabContent.nvue';
+    import uniTabBar from '@/components/tab-nvue/tabBar.nvue';
+    import uniTabs from '@/components/tab-nvue/tabs.nvue';
+    import uniMediaList from '@/components/tab-nvue/mediaList.nvue';
+
+    import { toast } from '@/common/util';
+
+    import { getNews, getNewsList } from '@/service/getData';
+
+    const dom = weex.requireModule('dom');
+    export default {
+        components: {
+            uniTabContent,
+            uniTabBar,
+            uniTabs,
+            uniMediaList
+        },
+        data() {
+            return {
+                refreshing: false,
+                refreshText: '下拉可以刷新',
+                tabIndex: 0,
+                tabBars: [],
+                loadingText: ['查看更多', '加载中...', '没有更多了']
+            };
+        },
+        created() {
+            this.getTabBar();
+        },
+        methods: {
+            goDetail(e) {
+                uni.navigateTo({
+                    url: '/pages/news/detail/detail?title=' + this.tabBars[this.tabIndex].name + '&id=' + e.id
+                });
+            },
+            getTabBar() {
+                getNews().then(res => {
+                    let data = res.data;
+                    for (let i = 0, length = data.length; i < length; i++) {
+                        data[i].page = 1;
+                        data[i].loadingType = 0;
+                        data[i].data = [];
+                    }
+                    let obj = [
+                        {
+                            name: '头条',
+                            id: '',
+                            page: 1,
+                            loadingType: 0,
+                            data: []
+                        }
+                    ];
+                    this.tabBars = obj.concat(data);
+                    this.getData();
+                });
+            },
+            getData() {
+                if(this.tabBars[this.tabIndex].loadingType == 2) return;
+                this.tabBars[this.tabIndex].loadingType = 1;
+                toast.loading();
+                getNewsList({ id: this.tabBars[this.tabIndex].id, page: this.tabBars[this.tabIndex].page }).then(res => {
+                    if (this.tabBars[this.tabIndex].page == 1) {
+                        this.tabBars[this.tabIndex].data = res.data;
+                    } else {
+                        this.tabBars[this.tabIndex].data = this.tabBars[this.tabIndex].data.concat(res.data);
+                    }
+                    toast.hideLoading();
+                    this.refreshing = false;
+                    if (res.data.length < 15) {
+                        this.tabBars[this.tabIndex].loadingType = 2;
+                    }else{
+                        this.tabBars[this.tabIndex].loadingType = 0;
+                        this.tabBars[this.tabIndex].page++;
+                    }
+                });
+            },
+            async changeTab(e) {
+                this.tabIndex = e.index;
+                if(!this.tabBars[this.tabIndex].data.length){
+                    this.getData();
+                }
+            },
+            getElSize(el) {
+                //得到元素的size
+                return new Promise((res, rej) => {
+                    const result = dom.getComponentRect(el, option => {
+                        res(option.size);
+                    });
+                });
+            },
+            onrefresh(event) {
+                this.refreshText = '正在刷新...';
+                this.refreshing = true;
+                this.tabBars[this.tabIndex].page = 1;
+                this.tabBars[this.tabIndex].loadingType = 1;
+                this.getData();
+            },
+            onpullingdown(event) {
+                if (this.refreshing) {
+                    return;
+                }
+                if (Math.abs(event.pullingDistance) > Math.abs(event.viewHeight)) {
+                    this.refreshText = '释放立即刷新';
+                } else {
+                    this.refreshText = '下拉可以刷新';
+                }
+            }
+        }
+    };
+</script>
+
+<style>
+    .page{
+        background-color: #fff;
+    }
+.tab-bar-item {
+    width: 150px;
+    height: 100px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab-bar-title {
+    height: 100px;
+    line-height: 100px;
+    font-size: 30px;
+    color: #555;
+}
+
+.active {
+    color: #0091E6;
+}
+
+.loadmore {
+    height: 70px;
+    width: 750px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loadmore-text {
+    font-size: 30px;
+    text-align: center;
+    color: #999999;
+}
+
+.refresh {
+    width: 750px;
+    height: 70px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-text {
+    text-align: center;
+    font-size: 28px;
+    color: #999999;
+}
+</style>

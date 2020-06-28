@@ -1,0 +1,242 @@
+@import '../mixin/flex.scss';
+@import '../mixin/hr.scss';
+
+$form: '.form';
+
+#{$form}{
+    @include flex(null, stretch, column);
+    position: relative;
+    
+    &__list{
+        @include flex(null, null, column);
+        position: relative;
+        
+        &::before{
+            @include hr(top);
+        }
+        
+        &::after{
+            @include hr(bottom);
+        }
+    }
+    
+    &__cell{
+        position: relative;
+        @include flex(between, center);
+        width: 100%;
+        padding: $uni-spacing-col-lg 0;
+        
+        &::after{
+            @include hr(bottom, $uni-spacing-row-base);
+        }
+        
+        &:last-child::after{
+            display: none;
+        }
+        
+        &--column{
+            @include flex(null, null, column);
+            width: 100%;
+            padding: $uni-spacing-col-base 0;
+            
+            #{$form}__label{
+                color: $uni-text-color-grey;
+                font-size: $uni-font-size-base;
+                padding: 0;
+            }
+        }
+        
+        &--hover{
+            background-color: #f8f8f8;
+        }
+    }
+        
+    &__label{
+        @include flex-self(keep, top);
+        min-height: 1em;
+        line-height: 1.5;
+        padding: 0 $uni-spacing-row-base;
+        color: $uni-text-color;
+        font-size: 15px;
+    }
+    
+    &__note, &__field{
+        text-align: left;
+        min-height:1em;
+        line-height: 1.5;
+        padding-right: $uni-spacing-row-base;
+        font-size: 14px;
+        color: $uni-text-color-grey;
+    }
+    
+    &Input{
+        position: relative;
+        @include flex(between, center);
+        width: 100%;
+        height: 44px;
+        
+        &::after{
+            @include hr(bottom)
+        }
+        
+        &__left{
+            @include flex-self(keep);
+            position: relative;
+            width: 34upx;
+            height: 34upx;
+            padding-right: $uni-spacing-row-sm;
+            margin-right: $uni-spacing-row-base;
+            
+            &::after{
+                @include hr(right)
+            }
+        }
+        
+        &__img{
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        &__field{
+            @include flex-self(full);
+            box-sizing: border-box;
+            height: 22px;
+            min-height: 22px;
+            padding-right: $uni-spacing-row-base;
+            font-size: $uni-font-size-base;
+            color: $uni-text-color;
+            
+            &--right{
+                text-align: right;
+                color: $uni-text-color-grey;
+            }
+        }
+		
+		&__fieldpicker{
+			@include flex-self(full);
+			font-size: 36upx;
+			color:#8d8d8d;
+			align-items: center;
+		    
+		}
+        
+        & &__field{
+            @include flex-self(full);
+            font-size: 36upx;
+        }
+        
+        &__helper{
+            @include flex-self(keep);
+            color: $uni-color-primary;
+            padding-left: 16upx;
+        }
+        
+        &__code{
+            @include flex-self(keep);
+            position: relative;
+            width: 200upx;
+            text-align: center;
+            color: $uni-color-primary;
+            padding-left: 16upx;
+            
+            &::after{
+                @include hr(left);
+            }
+        }
+        
+        .uni-icons{
+            color: $uni-text-color-grey;
+            padding: 0 16upx;
+        }
+        
+        .uni-icon-eye.uni-active{
+            color: $uni-color-primary;
+        }
+        
+        &--radius{
+            @include flex(between, center);
+            box-sizing: border-box;
+            width: 100%;
+            height: 48px;
+            background-color: $uni-bg-color-grey;
+            border-radius: 48px;
+            padding: $uni-spacing-col-base $uni-spacing-row-base;
+            margin-bottom: $uni-spacing-col-lg;
+        }
+        
+        &--radius &__left{
+            position: relative;
+            padding: 0;
+            width: 88upx;
+            
+            &::after{
+                @include hr(right)
+            }
+        }
+        
+        &--radius &__field{
+            padding-left: $uni-spacing-row-base;
+        }
+    }
+    
+    &__textarea{
+        width: 100%;
+        min-height:150rpx;
+        height:150rpx;
+        line-height: 1.6;
+        // ios兼容
+        margin-left: -$uni-spacing-row-base;
+        padding-left: $uni-spacing-row-base;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    
+    &__radio{
+        @include flex(end, center);
+        
+        label{
+            height: 1.4rem;
+            line-height: 1.4rem;
+            padding-right: $uni-spacing-row-base;
+        }
+    }
+    
+    &__cell picker {
+        flex: auto;
+        
+        #{$form}__note,
+        #{$form}__field {
+          text-align: right;
+        }
+    }
+    
+    &__badge{
+        display: inline-block;
+        box-sizing: border-box;
+        line-height: 1;
+        padding: 3px 6px;
+        margin-right: $uni-spacing-row-base;
+        font-size: 11px;
+        color: #fff;
+        border-radius: 100px;
+        background-color: #4cd964;
+    }
+    
+    &__wran{
+        color: $uni-color-warning;
+    }
+
+    .checked {
+        @include flex(null, center);
+        padding: 0 $uni-spacing-row-base;
+
+        &__field {
+            @include flex(null, center);
+            height: 88rpx;
+        }
+    }
+    
+    &__link{
+        color: $color-sub;
+    }
+}

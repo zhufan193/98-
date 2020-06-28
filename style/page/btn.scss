@@ -1,0 +1,17 @@
+%__btn{
+    height: 44px;
+}
+
+.btn{
+    &--login[type=primary]{
+        @extend %__btn;
+        margin: 0 100upx 16upx;
+        background-color: $uni-color-primary;
+    }
+    
+    &--login[type=warn]{
+        @extend %__btn;
+        margin: 0 100upx 16upx;
+        background-color: $uni-color-error;
+    }
+}

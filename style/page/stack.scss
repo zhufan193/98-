@@ -1,0 +1,15 @@
+.stack{
+    
+    &__main{
+        position: relative;
+        height: 86upx;
+    }
+    
+    &__bottom{
+        position: absolute;
+        top: -$uni-spacing-col-base * 1.5;
+        left: $uni-spacing-row-base;
+        right: $uni-spacing-row-base;
+        z-index: 1;
+    }
+}

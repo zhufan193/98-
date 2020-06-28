@@ -1,0 +1,118 @@
+<template>
+	<view>
+		<view ><!-- :style="{height:height}" -->
+		    <view style="width: 100%;height: 100%;">    
+		        <map id="maphight"  :controls="controls" :style="{height:phoneHigt+'px'}" :circles="circles" :polyline='polyline' :scale="scale" :latitude="latitude" :longitude="longitude" :markers="covers" @markertap="_list" @labeltap="_list">
+					<cover-view class="locate">
+						<map-table :isshow.sync="isshow" v-on:greet="close"></map-table>	
+					</cover-view>
+				</map>	
+		    </view>
+		</view>
+	</view>
+</template>
+ 
+<script>
+	import mapTable from '@/components/map-table/map-table.vue';
+	import { portData } from '@/config/portData.js';
+	export default {
+		components:{
+			mapTable
+		},
+	
+		data() {
+			return {
+				height:'1000upx',
+				show:false,
+				title: 'map',
+				latitude: 39.909,
+				longitude: 116.39742,
+					scale:7,//地图层级
+					portdata:'',
+				covers: [],
+				isshow: false,  //是否显示具体信息组件
+				phoneHigt: '',
+
+			};
+		},
+
+		onLoad(){
+			this.covers=portData;
+			this.covers[0].label.content='15';
+			var _this = this;
+			uni.getSystemInfo({
+			    success: function (res) {
+
+					console.log(res.brand) //手机牌子
+										console.log(res.model) //手机型号
+										console.log(res.screenWidth) //屏幕宽度
+										console.log(res.screenHeight) //屏幕高度
+					// 判断是否为华为手机
+					if(res.brand == 'HUAWEI'){
+						_this.phoneHigt = res.screenHeight * 2;
+					}else{
+					    _this.phoneHigt = res.screenHeight;
+					}
+
+			    }
+			});
+			console.log("手机高度"+this.phoneHigt);
+			
+		},
+		onReady(){
+			uni.getSystemInfo({
+			    success: function (res) {
+					console.log(res.brand) //手机牌子
+										console.log(res.model) //手机型号
+										console.log(res.screenWidth) //屏幕宽度
+										console.log(res.screenHeight) //屏幕高度
+			
+			    }
+			});
+		},
+		methods:{
+			_list:function(e){
+				var aid;
+				//aid=this.height.substr(0,4);
+				//aid=aid+100;
+				aid=parseInt(this.height);
+				aid=aid+100;
+				aid=aid+'upx';
+				console.log(aid);
+				console.log(e.detail);
+				this.covers[0].label.content='13';
+				this.show=!this.show;
+				this.isshow = true;
+				console.log(this.isshow);
+			},
+			close(isshow){
+				this.isshow=isshow;	
+			}
+		}
+	}
+</script>
+ 
+<style>
+	
+	.title {
+		font-size: 32upx;
+		color: #ff0000;
+	}
+	.box {
+		margin: 20upx;
+	} 
+	.locate{
+		position:absolute;
+		   left:0px;
+		   top:700upx;
+		   height: 700upx;
+		   
+		   background-color: #aaaa7f;
+		   flex-direction:column;
+	}
+	.name_and_content{
+		 color: #ff0000;
+		
+	}
+ 
+</style>
