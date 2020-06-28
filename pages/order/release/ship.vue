@@ -23,10 +23,10 @@
 					</view>
 				</view>
 				<view class="for-information">
-					油,
+					[散货船],
+					111,
 					5吨,
-					运费:1000元,
-					装运截止:2020-06-24
+					空船期至:2020-06-24
 				</view>
 				<view class="for-zt">
 					<text>状态:</text>
@@ -43,14 +43,14 @@
 					</view>
 				</view>
 				<view class="for-information">
-					油,
+					[散货船],
+					111,
 					5吨,
-					运费:1000元,
-					装运截止:2020-06-24
+					空船期至:2020-06-24
 				</view>
 				<view class="for-zt">
 					<text>状态:</text>
-					<text>寻托运</text>
+					<text>寻货源</text>
 				</view>
 			</view>
 			

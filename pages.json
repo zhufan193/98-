@@ -703,6 +703,21 @@
                         }
                     }
                 },
+				{
+				    "path" : "place-order/place-order",
+				    "style" : {
+				        "navigationBarTitleText" : "下订单",
+				        "enablePullDownRefresh" : true,
+				        "app-plus" : {
+				            "pullToRefresh" : {
+				                "support" : true,
+				                "color" : "#0091E6",
+				                "style" : "circle",
+				                "offset" : "44px"
+				            }
+				        }
+				    }
+				},
                 {
                     "path" : "sea-my-detail/sea-my-detail",
                     "style" : {

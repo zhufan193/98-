@@ -64,12 +64,12 @@
 				<template v-if="role == 1">
 					<view class="centent-list" v-for="(tem,index) in tems">
 						<view class="list-first">
-							<view><image src="@/static/img/right.png" style="width: 30upx;height: 30upx;top: 5upx;"></image>1232435</view>
+							<view @click="goPage('/pages/order/place-order/place-order')"><image src="@/static/img/right.png" style="width: 30upx;height: 30upx;top: 5upx;"></image>1232435</view>
 							<view><image src="@/static/img/head.png"></image>货源订单</view>
 						</view>
-						<view class="list-second">
-							<view>油</view>
-							<view>1000元</view>
+						<view class="list-second" @click="goPage('/pages/order/place-order/place-order')">
+							<view @click="goPage('/pages/order/place-order/place-order')">油</view>
+							<view @click="goPage('/pages/order/place-order/place-order')">1000元</view>
 						</view>
 						<view class="list-third">下单时间:2020-06-24,祝凡,15179140060</view>
 						<view class="list-four">
@@ -118,7 +118,7 @@
 				choiceName: "未确认订单数",
 				num: 0,
 				querenValue: false,  //是否点击确认订单
-				role: 0, //用户jues,0是货主，1是船主
+				role: 1, //用户jues,0是货主，1是船主
 				tems: [{}], //测试数据列表
 			}
 		},
@@ -172,9 +172,9 @@
 			//     }
 			//     router.navigateTo(url, param);
 			// },
-			goPage() {
+			goPage(adder) {
 				console.log("签订合同")
-				router.navigateTo('/pages/order/signContract/signContract');	
+				router.navigateTo(adder);	
 			}
 		}
 	}
@@ -254,6 +254,7 @@
 						display: flex;
 						flex-direction: row;
 						padding: 10upx 0;
+						margin-top: 10upx;
 						font-size: 34upx;
 						view:nth-child(2){
 							color: #007AFF;
