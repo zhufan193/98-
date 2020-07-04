@@ -9,7 +9,93 @@ import {localStorage} from '@/common/util'
  * 基础
  */
 //测试
-export const sencondgetInit = (data) => secondrequest(data,'GET');
+export const secondgetInit = (data) => secondrequest(data,'GET');
+//用户登录接口
+export const secondlogin = (data) => secondrequest(data,'GET');
+//用户注册接口
+export const secondregister = (data) => secondrequest(data,'GET');
+//系统参数接口
+export const sencondsystem = (data) => secondrequest(data,'GET');
+//短信接口
+export const secondsms = (data) => secondrequest(data,'GET');
+//主页-幻灯片接口
+export const secondmainlantern = (data) => secondrequest(data,'GET');
+//主页-公告信息
+export const secondnotice = (data) => secondrequest(data,'GET');
+//主页-货源总数、船源总数
+export const secondsum= (data) => secondrequest(data,'GET');
+//主页-货源推荐
+export const secondrecommend = (data) => secondrequest(data,'GET');
+//主页-新闻资讯
+export const secondnews = (data) => secondrequest(data,'GET');
+//货源-幻灯片
+export const secondgoodslantern = (data) => secondrequest(data,'GET');
+//船源-幻灯片
+export const secondboatlantern = (data) => secondrequest(data,'GET');
+//货源信息（带参数）
+export const secondgoodsnews = (data) => secondrequest(data,'GET');
+//货源详细
+export const secondgoodsdetail = (data) => secondrequest(data,'GET');
+//船源信息（带参数）
+export const secondboatnews = (data) => secondrequest(data,'GET');
+//抢单货源提交接口
+export const secondgoodsSourceOrder = (data) => secondrequest(data,'GET');
+//燃油供应幻灯片
+export const secondoilslantern = (data) => secondrequest(data,'GET');
+//燃油供应列表
+export const secondoilslist = (data) => secondrequest(data,'GET');
+//燃油供应详情
+export const secondoilsdetail = (data) => secondrequest(data,'GET');
+//我要购油
+export const secondbuyoil = (data) => secondrequest(data,'GET');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 初始化
 export const getInit = (data) => request('init', data);

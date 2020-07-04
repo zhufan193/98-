@@ -441,6 +441,18 @@ function deepClone(source){
   }
   return targetObj;
 }
+//生成六位随机数，用于开始的注册
+function RondomPass(number){
+			    var arr = new Array;
+			    var arr1 = new Array("0","1","2","3","4","5","6","7","8","9");
+			    var nonceStr=''
+			    for(var i=0;i<number;i++){
+			        var n = Math.floor(Math.random()*10);
+			        arr[i] =arr1[n] ;
+			        nonceStr+=arr1[n];
+			    }
+				return nonceStr;
+			}
 
 
 module.exports = {
@@ -452,5 +464,6 @@ module.exports = {
     dateUtils: dateUtils,
     debounce: debounce,
     throttle: throttle,
-    deepClone: deepClone
+    deepClone: deepClone,
+	RondomPass: RondomPass
 }

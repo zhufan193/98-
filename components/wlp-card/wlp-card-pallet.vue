@@ -2,13 +2,13 @@
     <view class="list__cell" @tap="_clickMessage()">
         <view class="list__head">
             <view class="list__name">
-                {{options.name}}
+                {{options.hymc}}
                 <view class="list__helper">
-                    {{options.weigh}}吨
+                    {{options.hwdw}}吨
                 </view>
             </view>
             <text class="list__update">
-                {{options.resDate}}
+               联系人： {{options.lxr}}
             </text>
         </view>
         <view class="list__main">
@@ -17,15 +17,15 @@
                     受载日
                 </view>
                 <view class="list__note">
-                    {{resEmpty}}
+                    {{options.zyqx}}±{{options.kq}}
                 </view>
             </view>
             <view class="list__info">
                 <view class="list__label">
                     装货地
                 </view>
-                <view class="list__note" :style="{'font-size': resFontSize}">
-                    {{options.departure_na}}
+                <view class="list__note" style="fontsize:5upx ">
+                    {{options.qdsheng}}
                 </view>
             </view>
             <image class="list__imgRight" src="/static/img/sail_right.png" mode="scaleToFill"></image>
@@ -33,8 +33,8 @@
                 <view class="list__label">
                     卸货地
                 </view>
-                <view class="list__note" :style="{'font-size': resFontSize2}">
-                    {{options.target}}
+                <view class="list__note" style="fontsize:5upx ">
+                    {{options.zdsheng}}
                 </view>
             </view>
         </view>

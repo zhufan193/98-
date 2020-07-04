@@ -38,7 +38,7 @@
 			
 			   <view class="form__cell--column" v-if="active == 3">
 			<view class="form__label">
-				    所属机构
+				    用户名
 				</view>
 			<view class="formInput" v-if="active == 3">
 				
@@ -46,15 +46,55 @@
 				<view class="formInput__left">
 				    <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
 				</view>
-			 <picker class="formInput__field" @change="bindPickerChange" :value="index" :range="array">
-			                     <view class="formInput__fieldpicker">{{array[index]}}</view>
-			                   </picker>	 
+			 <input class="formInput__field"
+			     type="text" 
+			     confirm-type="next" 
+			     :value="loginname" 
+			     placeholder="请设置登录用户名"
+			     @input="bindLoginname" />	 
 			</view>
 			</view>
 			
 			<view class="form__cell--column" v-if="active == 3">
+			    <view class="form__label">
+			        密码
+			    </view>
+			   
+			   <view class="formInput" v-if="active == 3">
+			        <view class="formInput__left">
+			            <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
+			        </view>
+			        <input class="formInput__field" 
+			            type="text" 
+			            confirm-type="next" 
+			            :value="valuePwd" 
+						password="true"
+			            placeholder="请设置6-12位登录密码"
+			            @input="bindPwd" />
+			        <view class="uni-icon uni-icon-clear" v-if="showClearPwd" @click="clearIconPwd"></view>
+			    </view>
+			</view>
+			
+			<view class="formInput" v-if="active == 3">
+			    <view class="formInput__left">
+			        <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
+			    </view>
+			    <input class="formInput__field"  
+			        type="text" 
+			        confirm-type="next" 
+			        :value="valuePwda" 
+					password="true"
+			        placeholder="请确认密码"
+			        @input="bindPwda" />
+			    <view class="uni-icon uni-icon-clear" v-if="showClearPwd" @click="clearIconPwd"></view>
+			</view>
+			<!-- <view class="pageTips" :class="{'pageTips--error': messageTxt == '请输入正确手机号！'}">
+			    {{messageTxt}}
+			</view> -->
+			
+			<view class="form__cell--column" v-if="active == 3">
 			<view class="form__label">
-				    用户身份
+				    手机号
 				</view>
 			<view class="formInput" >
 				
@@ -62,47 +102,35 @@
 				<view class="formInput__left">
 				    <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
 				</view>
-			 <picker class="formInput__field" @change="bindStatusChange" :value="number" :range="status">
-			                     <view class="formInput__fieldpicker">{{status[number]}}</view>
-			                   </picker>	 
+			<input class="formInput__field"
+			    type="text" 
+			    confirm-type="next" 
+			    :placeholder="valuePhone"
+				disabled="true"
+			     /> 
 			</view>
 			</view>
 			
-            <view class="form__cell--column" v-if="active == 3">
-                <view class="form__label">
-                    密码
-                </view>
-               
-			   <view class="formInput" v-if="active == 3">
-                    <view class="formInput__left">
-                        <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
-                    </view>
-                    <input class="formInput__field" 
-                        type="text" 
-                        confirm-type="next" 
-                        :value="valuePwd" 
-                        placeholder="请设置6-12位登录密码"
-                        @input="bindPwd" />
-                    <view class="uni-icon uni-icon-clear" v-if="showClearPwd" @click="clearIconPwd"></view>
-                </view>
-            </view>
-			
-			<view class="formInput" v-if="active == 3">
-			    <view class="formInput__left">
-			        <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
-			    </view>
-			    <input class="formInput__field" 
-			        type="text" 
-			        confirm-type="next" 
-			        :value="valuePwd" 
-			        placeholder="请输入真实姓名"
-			        @input="bindPwd" />
-			    <view class="uni-icon uni-icon-clear" v-if="showClearPwd" @click="clearIconPwd"></view>
+			<view class="form__cell--column" v-if="active == 3">
+			<view class="form__label">
+				    真实姓名
+				</view>
+			<view class="formInput" >
+				
+				
+				<view class="formInput__left">
+				    <image class="formInput__img" src="/static/icon/pwd.png" mode="aspectFit"></image>
+				</view>
+			 <input class="formInput__field"
+			     type="text" 
+			     confirm-type="next" 
+			     :value="username" 
+			     placeholder="请输入真实姓名"
+			     @input="bindUsername" />	 
+			</view>
 			</view>
 			
-			<view class="pageTips" :class="{'pageTips--error': messageTxt == '请输入正确手机号！'}">
-                {{messageTxt}}
-            </view>
+          
             <button class="btn" type="primary" v-if="active == 0 || active == 2 || active == 3" @tap="_clickBtn">{{active == 0 ? '发送验证码' : active == 3 ? '完成' : '提交'}}</button>
             <view class="btn--switch" @tap="_clickBtnCode" v-if="active == 1">
                 {{inputCheckCode}}
@@ -119,8 +147,8 @@
     import uniStatusBar from '@/components/uni-status-bar/uni-status-bar.vue'
     import uniIcons from '@/components/uni-icons/uni-icons.vue'
     
-    import { router, toast, check } from '@/common/util.js';
-	import { postRegisterAccount, postSecCode, postRegister } from '@/service/getData';
+    import { router, toast, check ,RondomPass } from '@/common/util.js';
+	import {secondsms ,secondlogin, postRegisterAccount, postSecCode, postRegister } from '@/service/getData';
     import { mapState, mapMutations } from 'vuex';
 
 	export default {
@@ -134,7 +162,10 @@
 				list: ['请输入手机号', '请输入验证码', '请设置密码', '注册成功'],
                 valuePhone: '', // 手机号
                 showClearPhone: false,
+				loginname:'',//用户名
                 valuePwd: '',
+				valuePwda:'',//确认密码
+				username:'',//真实姓名
                 showClearPwd: false,
                 valueCode: '', // 验证码
                 messageTxt: '', // 错误提示
@@ -144,10 +175,10 @@
 				 index: 0,
 				 status:['船东','船代','货主','货代','货员','供应商'],
 				 number:0,
+				 codekey:'',
 			};
 		},
         computed: {
-            ...mapState(['code_key']),
             resValueCode() {
                 return [this.valueCode.charAt(0),this.valueCode.charAt(1),this.valueCode.charAt(2),this.valueCode.charAt(3),this.valueCode.charAt(4),this.valueCode.charAt(5)]
             }
@@ -176,9 +207,13 @@
 				if (e.target.value.length <= 6 && this.valueCode !== e.target.value) {
                     this.valueCode = e.target.value;
                     if (this.valueCode.length == 6){
-                        this.active++;
+						if( this.valueCode == this.codekey){
+							this.active=3;
                         this.messageTxt = '';
+						}else{
+						toast.show("验证码错误");
                     }
+					}
 				}
             },
             bindPwd(e) { // 密码绑定
@@ -193,13 +228,19 @@
                     }
 				}
             },
-			bindPickerChange:function(e){
-				//console.log(e.target);
-				this.index=e.target.value;
+			bindPwda(e){
+				this.valuePwda=e.target.value;
+				/* if(e.target.value != this.valuePwd){
+					toast.show("两次输入密码不同");
+				} */
 			},
-			bindStatusChange:function(e){
-				this.number=e.target.value;
+			bindLoginname(e){
+				this.loginname = e.target.value;
 			},
+			bindUsername(e){
+				this.username = e.target.value;
+			},
+
             clearIconPwd() {
                 this.valuePwd = '';
                 this.showClearPwd = false;
@@ -210,38 +251,80 @@
                         this.messageTxt = '请输入正确手机号！';
                         return;
                     }
-                    toast.loading('验证账号...');
-                    postRegisterAccount({account: this.valuePhone}).then(res => {
+                    //toast.loading('验证账号...');
+					this.codekey=RondomPass(6);
+					console.log(this.codekey);
+					this.active++;
+					this._clickBtnCode(); 
+                    /* postRegisterAccount({account: this.valuePhone}).then(res => {
                         toast.hideLoading();
                         this.messageTxt = '';
                         this._clickBtnCode();
                     }, err => {
                         this.messageTxt = err.message;
-                    });
+                    }); */
                     return;
                 }else if(this.active == 1){
                     this._clickBtnCode();
                     return;
-                }else if(this.active == 2){
+                }else if(this.active == 3){
+					if(this.loginname == ''){
+						toast.show("请输入用户名");
+						 return;
+					}
+					if(this.valuePwd == ''){
+						toast.show("请输入密码");
+						 return;
+					}
+					if(this.valuePwda == ''){
+						toast.show("请输入确认密码");
+						 return;
+					}
                     let str = check.password(this.valuePwd)
                     if(str != ''){
                         this.messageTxt = str;
+						toast.show(this.messageTxt);
                         return;
                     }
-                    let clientId = 'weixin'
+					if(this.valuePwd != this.valuePwda){
+						toast.show("两次输入的密码不一致");
+						 return;
+					}
+					if(this.username == ''){
+						toast.show("请输入真实姓名");
+						return;
+					}
+					toast.loading('注册...');
+					 secondlogin({data:{"type":"reg","uname":this.loginname,"upass":this.valuePwd,"identity":"1","mobile":this.valuePhone,"realname":this.username}}).then(res =>{
+					 	let lantern = eval('('+res.data+')');
+						if(lantern[0].stat == '0'){
+							toast.show("注册失败");
+							
+						}
+						if(lantern[0].stat == '1'){
+							toast.show("注册成功");
+							   router.reLaunch('/pages/user/login/login');
+						}
+						if(lantern[0].stat == '2'){
+							toast.show("该账户已被注册");
+						}
+					 	console.log(lantern);
+						
+					 });
+                    /* let clientId = 'weixin'
                     // #ifdef APP-PLUS
                     var info = plus.push.getClientInfo();
                     if (info.token != "null" || info.clientid != "null")
                     {
                         clientId = info.clientid
                     }
-                    // #endif
-                    toast.loading('注册...');
-                    postRegister({account: this.valuePhone, sec_key: this.secCodekey, sec_code: this.valueCode, password: this.valuePwd, client: clientId}).then(res => {
+                    // #endif */
+                    
+                   /* postRegister({account: this.valuePhone, sec_key: this.secCodekey, sec_code: this.valueCode, password: this.valuePwd, client: clientId}).then(res => {
                         // 统计
                         uni.report('register',{
                             'client': clientId,
-                            'account': this.valuePhone
+                            'account': this.
                         });
                         // 记录用户信息
                         this.TOKEN_USERUPDATA(res.data.token);
@@ -252,11 +335,10 @@
                         toast.hideLoading();
                         this.active--;
                         this.messageTxt = err.message;
-                    });
+                    }); */
                     return;
                 }
                 // 完成
-                router.reLaunch('/pages/tabBar/home/home')
             },
             // 发送验证码
             _clickBtnCode() {
@@ -266,9 +348,10 @@
                     return;
                 }
                 toast.loading('发送验证码...');
-                postSecCode({account: this.valuePhone, check_key: this.code_key}).then(res => {
+                secondsms({data:{"type":"sms","stype":"1", "mobile":this.valuePhone,"mes":this.codekey}}).then(res =>{
                     toast.hideLoading();
-                	this.secCodekey = res.data.sec_key;
+					console.log(res);
+                	//this.secCodekey = res.data.sec_key;//验证码校验码
 // 短信接口未开 直接打印
 // toast.show('短信接口未开,直接填写');
 // this.valueCode = res.data.code;

@@ -4,6 +4,7 @@ export const TOKEN_USERUPDATA = 'TOKEN_USERUPDATA'                      // 记�
 export const CODE_KEY_UPDATA = 'CODE_KEY_UPDATA'                        // code_key记录
 export const CUSTOMER_UPDATA = 'CUSTOMER_UPDATA'                        // app信息记录
 export const RECORD_USERINFO = 'RECORD_USERINFO'                        // 记录用户信息
+export const RECORD_STSTEMCONFIG = 'RECORD_STSTEMCONFIG'                // 记录系统设置信息
 export const LOGOUT = 'LOGOUT'                                          // 注销
 export const LOCATION_UPDATA = 'LOCATION_UPDATA'                        // 当前经纬度更新
 export const ADDRESS_UPDATA = 'ADDRESS_UPDATA'                          // 当前地址更新

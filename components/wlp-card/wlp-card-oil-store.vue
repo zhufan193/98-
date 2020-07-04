@@ -3,28 +3,32 @@
         <view class="card__content card__content--left" @tap="_clickMessage('main')">
             <view class="card__right">
                 <view class="card__head">
-                    <text class="card__title">
-                        {{options.company_name}}
+                    <text class="card__title" style="color: #0091E6;font-size: 30upx;">
+                        {{options.gsmc}}
                     </text>
-                    <view class="card__badge">{{options.verify_type == 2 ? '企业认证' : '个人认证'}}</view>
+                    <!-- <view class="card__badge">{{options.verify_type == 2 ? '企业认证' : '个人认证'}}</view> -->
                 </view>
                 <view class="card__row text-overflow">
-                    {{options.detail}}
+                    供应区域：{{options.gyqy}}
                 </view>
+				<view class="card__row text-overflow" style="color: #359f4e;">
+				    油种价格：{{options.yzjg}}
+				</view>
             </view>
             <view class="card__left"  :data-index="index" :class="{is_lazy:!show}">
                     <view class="card__img card__img--nth3 lazy">
-                        <image class="lazy__img" :src="show ? options.images[0] : ''" mode="aspectFill" @load="imageLoad(0)"></image>
-                        <image class="lazy__img lazy__placeholder" :class="{lazy__loaded : loaded[0]}" src="/static/img/loading300x300.jpg" mode="aspectFill"></image>
+						<image class="lazy__img" :src="options.pic" mode="aspectFill" @load="imageLoad(0)"></image>
+                        <!-- <image class="lazy__img" :src="show ? options.images[0] : ''" mode="aspectFill" @load="imageLoad(0)"></image>
+                        <image class="lazy__img lazy__placeholder" :class="{lazy__loaded : loaded[0]}" src="/static/img/loading300x300.jpg" mode="aspectFill"></image> -->
                     </view>
             </view>
         </view>
-        <view class="card__foot card__foot--dashed" @tap="_phone()">
+        <!-- <view class="card__foot card__foot--dashed" @tap="_phone()">
             <view class="card__info">
-                {{options.full_address}}
+                {{options.yzjg}}
             </view>
             <uni-icons type="phone" size="16" color="#999"></uni-icons>
-        </view>
+        </view> -->
     </view>
 </template>
 

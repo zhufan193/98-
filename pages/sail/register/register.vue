@@ -53,7 +53,7 @@
 				<view class="form__cell">
 				    <view class="form__label"><text class="form__wran">*</text>船型</view>
 				    <view> 
-						<picker @change="bindPickerChange" :value="indexa" :range="arraya"> 
+						<picker @change="bindPickerChangea" :value="indexa" :range="arraya"> 
 				  			<view class="uni-input common-right" >{{arraya[indexa]}}</view>
 						</picker>
 					</view>
@@ -62,8 +62,8 @@
 				<view class="form__cell">
 					<view class="form__label"><text class="form__wran">*</text>航线类型</view>
 					<view> 
-						<picker @change="bindPickerChange" :value="indexa" :range="arraya"> 
-							<view class="uni-input common-right" >{{arraya[indexa]}}</view>
+						<picker @change="bindPickerChangeb" :value="indexb" :range="arrayb"> 
+							<view class="uni-input common-right" >{{arrayb[indexb]}}</view>
 						</picker>
 					</view>
 				</view>  
@@ -71,8 +71,8 @@
 				<view class="form__cell">
 					<view class="form__label"><text class="form__wran">*</text>封仓形式</view>
 					<view> 
-						<picker @change="bindPickerChangeb" :value="indexb" :range="arrayb"> 
-			   				<view class="uni-input common-right" >{{arrayb[indexb]}}</view>
+						<picker @change="bindPickerChangec" :value="indexc" :range="arrayc"> 
+			   				<view class="uni-input common-right" >{{arrayc[indexc]}}</view>
 						</picker>
 					</view>
 			   </view> 			  
@@ -98,27 +98,28 @@
 					<view> <input class="uni-input common-right"   placeholder="请输入公司电话" /></view>
 				</view>
 				
-				<view class="form__cell">
-					<view class="form__label"><text class="form__wran">*</text>船舶主要项目</view>
-					<view> 
-
-						<button class="show-button" v-if="!photoaddressShow" @click="photopush">点击这里上传船舶主要项目图片</button>
-						<button class="show-button" v-if="photoaddressShow" @click="photopush">图片{{photo}}</button>
-
-					</view>
-				</view>
+				<view class="card card--full">
+				    <view class="card__head">
+				        <view class="card__title">
+				            船舶主要项目
+				        </view>
+				    </view>
+					
+				    <view class="card__content idcard">
+				        
+						<view class="idcard__cell">
+				            <view class="idcard__img">
+				                <view class="idcard__close" v-if="idcard_img[0].path != '' && review_state == 2" @tap="_closeImage(0)"><uni-icons type="clear" color="#FF4C4C" size="24"></uni-icons></view>
+				                <image class="idcard__picture" @tap="_chooseImage(0)" :class="{'idcard__picture--left': idcard_img[0].orientation != 'up'}" :src="idcard_img[0].path ? idcard_img[0].path : '/static/img/id_card_img.png'" mode="aspectFill"></image>
+				            </view>
+				            <view class="idcard__txt">点击上传</view>
+				        </view>
+						
+						
+				    </view>
+				 </view>
+				 <cpimg ref="cpimg" @result="cpimgOk" @err="cpimgErr" />
 				
-				<uni-popup :show="is_popupShow" position="middle" mode="fixed">
-					<view class="popup-view">
-						<radio-group @change="get_radio">
-						   <label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in items" :key="item.value">
-							   <view>
-								   <radio :value="item.value" :checked="index === radiovalue" />{{item.name}}
-							   </view>
-						   </label>
-					   </radio-group>
-					</view>
-				</uni-popup>
 				
 
 
@@ -130,13 +131,6 @@
         <view class="foot">
             <button class="foot__btn" type="primary" @click="sendBtn">提交发布信息</button>
         </view>
-       
-         
-      <uni-popup :show="is_popupShow" position="middle" mode="fixed">
-      	<view class="popup-view">
-			<view @tap="_album">相册文件</view>
-      	</view>
-      </uni-popup>
        </template>
 
 	</view>
@@ -150,10 +144,12 @@
     import wlpGlobal from '@/components/wlp-global/wlp-global.vue';
 	import adDeharbor from '@/components/ad-deharbor/ad-deharbor.vue'; 
 	import provincePicker from '@/components/province-picker/province-picker.vue'; 
-	  
+	import cpimg from "@/components/cpimg/cpimg.vue"; 
+	
     import { router, toast, check } from '@/common/util.js';
     import { postPallet } from '@/service/getData.js';
     import { mapState, mapActions } from 'vuex';
+
 
     var globalTemp;
 	var photo;
@@ -166,7 +162,8 @@
             uniPopup,
             wlpGlobal,
 			adDeharbor,
-			provincePicker
+			provincePicker,
+			cpimg
         },
 		data() {
 			return {
@@ -201,7 +198,7 @@
 					'company':'',
 					'contact':'',
 					'phone':'',
-					'cname':''  //船舶名称
+					'cname':''  ,//船舶名称
                 },
                 cargoTypeIndex: [0, 0],
 				cargoTypeList: [],
@@ -215,17 +212,21 @@
                 is_mp: true,
                 is_popup: false,
                 popupInput: '',
-				indexa:0,//包装形式的选择
+				indexa:0,//船舶类型的选择
 				indexb:0,//航运类型的选择
-				arraya:['请选择包装形式','散装','封仓','袋装','箱装','罐桶装','裸装','其他'],
+				indexc:0,//封仓形式的选择
+				arraya:['请选择船舶类型','散货船', '散装水泥船','杂货船','集装箱船','拖队','油船','化学品船','液化气船','滚装船','多用途船','捕捞船','冷藏船','其他船'],
 				arrayb:['请选择航运类型','长江-内河','江海联运','海运'],
+				arrayc:['请选择封仓形式','无封仓','简易封仓','自动封仓'],
 				is_popupShow: false,  //是否显示单选按钮
 				radiovalue: '', //0是相机 1是文件
 				isgo:false,
 				isout:true,
 				provinc:'',
-				photoaddressShow:false,
-				photoaddress:'m',
+				idcard_img: [{
+				    path: '',
+				    orientation: 'up'
+				}],
 				
 			};
 		},
@@ -306,61 +307,56 @@
             _goPage(url) {
                 router.navigateTo(url);
             },
+			//选择图片
+			_chooseImage(index) {   
+			    let that = this;
+			    if(this.idcard_img[index].path == ''){
+			        this.$refs.cpimg._changImg(index);
+			    }else{
+			        // 查看图片
+			        uni.previewImage({
+			            current: 0,
+			            urls: [this.idcard_img[index].path]
+			        });
+			    }
+			},
+			//组件cpimg返回的文件结果
+			cpimgOk(file) {
+			    this.idcard_img[file.urlType].path = file.data[0];
+			    this.getImageInfo(file.urlType);
+			},
+			//cpimg返回的错误原因
+			cpimgErr(e) {
+			    toast.show(e);
+			},
+			//用于cpimg返回的正确结果的处理，获取图片信息
+			getImageInfo(index) {
+			    let that = this;
+			    uni.getImageInfo({
+			        src: that.idcard_img[index].path,
+			        success: function(info) {
+			            if(info.width < info.height){
+			                that.idcard_img[index].orientation = 'left';
+			            }
+			        }
+			    })
+			},
+			_closeImage(index) {
+			    this.idcard_img[index].path = '';
+			    this.idcard_img[index].orientation = 'up';
+			},
 			//用于获得包装形式
-			bindPickerChange: function(e) {
+			bindPickerChangea: function(e) {
 			            this.indexa = e.target.value;
 			        },
 			//用于获得航运类型
 			bindPickerChangeb: function(e) {
 					    this.indexb = e.target.value;
 					},
-					
-		_album() {
-		 				uni.chooseImage({
-					    count: 6, //默认9
-					    sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-						    sourceType: ['album'], //从相册选择
-						    success: function (res) {	
-								photo=JSON.stringify(res.tempFilePaths);
-								console.log(photo);
-							}
-														});},
-										
-		// _album() {
-		// 				uni.chooseImage({
-		// 				    count: 6, //默认9
-		// 				    sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-		// 				    sourceType: ['album'], //从相册选择
-		// 				    success: function (res) {
-								
-		// 						for(var i=0;i<res.tempFilePaths.length;i++){
-		// 														console.log("第"+i+"张图片路径:"+res.tempFilePaths[i]);
-		// 													}
-															
-		// 												uni.getImageInfo({
-															
-															
-															
-		// 													src:res.tempFilePaths[0],
-															
-		// 													success:function(image){
-																
-		// 														console.log("图片路径:"+image.path);
-																
-		// 														photo=image.path;
-		// 														this.photoaddressShow=true;
-		// 														this.is_popupShow = false;
-		// 														console.log(photo);
-		// 													}
-		// 												});
-								
-								
-								
-								
-		// 				    }
-		// 				});
-								
-		// 			},
+			//用于获得包装形式
+			bindPickerChangec: function(e) {
+			            this.indexc = e.target.value;
+			        },
 			go(){
 				this.isgo=true;
 				console.log("dadfasf");
@@ -490,28 +486,7 @@
                 this.is_target = false;
                 this.drawerVisible = false;
             },
-			
-
-			
-
-			
-			
-			takePhoto() {
-					 const ctx = uni.createCameraContext();
-					 ctx.takePhoto({
-						 quality: 'high',
-						 success: (res) => {
-							 this.src = res.tempImagePath
-						 }
-					 });
-				 },
-				 error(e) {
-					 console.log(e.detail);
-				 },
-
-
             sendBtn() {
-				console.log('船舶名称:'+this.photoaddress);
 				console.log('船舶名称:'+this.data.cname);
                 // 选择公司后改手动输入
 				if (this.data.company_id != '')
@@ -634,6 +609,77 @@
     @import '@/style/page/empty.scss';
     @import '@/style/page/foot.scss';
     @import '@/style/page/drawer.scss';
+
+	.info{
+	    padding: $uni-spacing-col-base $uni-spacing-row-base;
+	    background-color: #fff;
+	    text-align: center;
+	    
+	    &__txt{
+	        font-size: 24rpx;
+	        color: $uni-color-error;
+	    }
+	}
+	
+	.form{
+	    align-items: inherit;
+	    box-sizing: border-box;
+	    padding: $uni-spacing-col-lg 0 44px;
+	}
+	
+	.formInput{
+	    margin-bottom: 0;
+	}
+	
+	.idcard{
+	    @include flex(between);
+	    
+	    &__cell{
+	        width: 320upx;
+	    }
+	    
+	    &__img{
+	        position: relative;
+	        width: 308upx;
+	        height: 228upx;
+	        border-radius: $uni-border-radius-sm;
+	        margin-bottom: $uni-spacing-col-sm;
+	        border: 1px dashed $uni-border-color;
+	    }
+	    
+	    &__picture{
+	        position: absolute;
+	        top: 0;
+	        left: 0;
+	        display: block;
+	        width: 308upx;
+	        height: 228upx;
+	        
+	        &--left{
+	            width: 228upx;
+	            height: 308upx;
+	            transform-origin: top left;
+	            transform: rotate(90deg) translateY(-308upx);
+	        }
+	    }
+	    
+	    &__close{
+	        position: absolute;
+	        top: $uni-spacing-col-sm;
+	        right: $uni-spacing-row-sm;
+	        z-index: 999;
+	    }
+	    
+	    &__txt{
+	        text-align: center;
+	        font-size: $uni-font-size-sm;
+	        color: $uni-text-color-grey;
+	    }
+	}
+	
+	.link{
+	    color: $color-sub;
+	}
     
     .page{
         padding: 0 0 44px;
@@ -752,3 +798,4 @@
 		}
 	}
 </style>
+

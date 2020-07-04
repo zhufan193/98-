@@ -1,12 +1,12 @@
 <template>
     <view class="page">		
-	    <view><uni-swiper-dot :info="swiperData" :current="swiperCurrent" mode="long">
-			<swiper class="swiper-box" autoplay="true" circular="true" @change="onChangeSwiper">
-				<swiper-item class="swiper-item" v-for="(item ,index) in swiperData" :key="index" @tap="goBanner(item)">
-					<image :src="item.image_url" mode="aspectFill" />
-				</swiper-item>
-			</swiper>
-		</uni-swiper-dot></view>
+	    <uni-swiper-dot :info="swiperData" :current="swiperCurrent" mode="long">
+	    	<swiper class="swiper-box" autoplay="true" circular="true" @change="onChangeSwiper">
+	    		<swiper-item class="swiper-item" v-for="(item ,index) in swiperData" :key="index" @tap="goBanner(item)">
+	    			<image :src="item.img" mode="aspectFill" />
+	    		</swiper-item>
+	    	</swiper>
+	    </uni-swiper-dot>
 		
 		<view  class="view-title line">
 			<select-picker :option="array" v-on:greet="boat" class="select-picker-class"></select-picker>
@@ -57,7 +57,7 @@
 	import provinceSelect from '@/components/province-select/province-select.vue';
 
     import { router, toast, localStorage, dateUtils } from '@/common/util.js';
-    import { getSailList } from '@/service/getData.js';
+    import {secondboatlantern , getSailList } from '@/service/getData.js';
     
     import { mapState, mapMutations } from 'vuex';
 
@@ -118,15 +118,7 @@
                 target_na: '',
                 weight: '',
                 dateStr: '',
-				swiperData: [{
-					"id": 8,
-					"image_url": "/static/icon/home-grid-3.png",
-					"link": "/pages/common/rich-text-full/rich-text-full?id=8"
-				}, {
-					"id": 2,
-					"image_url": "/static/icon/home-grid-3.png",
-					"link": "/pages/common/rich-text-full/rich-text-full?id=9"
-				}],
+				swiperData: [],
 			  array: ['船舶类型', '不限', '散货船', '散装水泥船','杂货船','集装箱船','拖队','油船','化学品船','液化气船','滚装船','多用途船','捕捞船','冷藏船','其他船'],
 			  boatindex:'',
 			  transportarray:['航运类型','不限','长江-内河','江海联运','海运'],
@@ -138,10 +130,12 @@
 			  isout:true,   //判断显示出发港还是选择的地点
 			  isgotwo:false, //判断显示目的港地址选择组件
 			  provinctwo:'', //接收目的港
-			  isin:true
+			  isin:true,
+			  swiperCurrent: 0,//幻灯片
             };
         },
         async onLoad() {
+			this.uploada();
 	        toast.loading();
             // 导航条搜索清空
             localStorage.setStore('search_value_sail', '');
@@ -215,10 +209,10 @@
                 //     this.GOPAGE_LOGIN();
                 //     return;
                 // }
-				// toast.show('跳转到船舶注册页面');
-    //             router.navigateTo('/pages/sail/register/register');
-	        toast.show('跳转到船舶发布页面');
-	        router.navigateTo('/pages/sail/release/release');
+				 toast.show('跳转到船舶注册页面');
+                 router.navigateTo('/pages/sail/register/register');
+	        //toast.show('跳转到船舶发布页面');
+	        //router.navigateTo('/pages/sail/release/release');
             },
             _goDetail(param) {
 				// console.log("param.index"+param);
@@ -250,6 +244,61 @@
 				this.provinctwo=province;
 				this.isin=false;
 				
+			},
+			uploada(){
+				 var that = this ;
+				 uni.getStorage({
+					 key: 'saila',
+					 complete: function (res) {
+						 if(res.data.length > 0){	
+							 that.swiperData = res.data;
+							 console.log(that.swiperData[0].img);
+						 }
+						 else{
+							 console.log(res.data.length);
+							 console.log(res.data);
+							 console.log(res.data);
+							 that.uploadlantern();
+						 }	
+					 }
+				 })
+			},
+			uploadlantern(){
+								secondboatlantern({data:{"type":"hdp","lx":"52"}}).then(res => {
+								var lantern = eval('('+res.data+')');
+								console.log('接口返回数据：'+JSON.stringify(lantern[0].meslist));
+								var that = this;
+								
+										// 清空缓存数组
+										that.swiperData = [];
+										var imgurl = lantern[0].meslist;
+										for(var i = 0; i<imgurl.length;i++){
+											uni.downloadFile({
+											    url: imgurl[i].img, //仅为示例，并非真实的资源
+											    success: (res) => {
+											        if (res.statusCode === 200) {
+														that.swiperData.push({"img":res.tempFilePath});
+														console.log("下载图片成功:"+"0000000000000"+JSON.stringify(that.swiperData));
+														if(i == imgurl.length){
+															console.log(that.swiperData);
+															uni.setStorage({
+												               key: 'saila',
+												               data: that.swiperData,
+												               success: function () {}
+											                });
+														}
+												}
+												
+														}
+												});
+											}
+											
+											
+											});	
+										
+			},
+			onChangeSwiper(e){
+			    this.swiperCurrent = e.detail.current;
 			},
              getData(type = 'DownRefresh') {
                 if (type == 'DownRefresh') {
@@ -293,7 +342,10 @@
     };
 </script>
 
-<style>
+<style lang="scss">
+    @import '@/style/mixin/flex.scss';
+    @import '@/style/mixin/hr.scss';
+    @import '@/style/page/banner.scss';
 	.swiper-box {
 		height: 100%;
 		background: #eee;

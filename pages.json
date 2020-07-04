@@ -192,13 +192,6 @@
                     "softinputMode" : "adjustResize",
                     "softinputNavBar" : "none",
                     "titleNView" : {
-                        "buttons" : [
-                            {
-                                "fontSize" : "14px",
-                                "text" : "筛选",
-                                "width" : "54px"
-                            }
-                        ]
                     },
                     "pullToRefresh" : {
                         "support" : true,

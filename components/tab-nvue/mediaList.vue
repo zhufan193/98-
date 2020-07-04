@@ -6,11 +6,11 @@
                     <text class="media-title" :class="{'media-title2': type === 1 || type === 2}">{{options.title}}</text>
                     <view class="media-foot">
                     	<view class="media-info">
-                    		<text class="info-text">{{options.source}}</text>
+                    		<text class="info-text">{{options.typename}}|{{options.auto}}</text>
                     	</view>
                     	<view class="media-info">
                             <!-- <uni-icons type="eye" color="#999"></uni-icons> -->
-                            <text class="info-text">{{options.browser}}查看</text>
+                            <text class="info-text">{{options.view}}查看</text>
                     	</view>
                     </view>
                 </view>

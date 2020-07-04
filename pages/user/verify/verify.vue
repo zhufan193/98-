@@ -26,11 +26,12 @@
                 </view>
                 <view class="form__cell">
                     <view class="form__label">姓名</view>
-                    <input class="formInput__field formInput__field--right" type="text" name="realname" :disabled="review_state != 2" v-model="data.realname" placeholder="请输入姓名" placeholder-style="color: #999;"/>
+                    <!-- <input class="formInput__field formInput__field--right" type="text" name="realname" :disabled="review_state != 2" v-model="data.realname" placeholder="请输入姓名" placeholder-style="color: #999;"/> -->
+					<input class="formInput__field formInput__field--right" type="text" name="realname"  v-model="data.realname" placeholder="请输入姓名" placeholder-style="color: #999;"/>
                 </view>
                 <view class="form__cell" style="position: relative;">
                     <view class="form__label">性别</view>
-                    <radio-group v-if="review_state == 2" class="form__radio" name="sex">
+                    <radio-group  class="form__radio" name="sex">
                         <label class="radio" style="margin-right: 30upx;">
                             <radio color="#0091E6" style="transform:scale(0.7)" :value="1" :checked="data.sex === 1"/>男
                         </label>
@@ -38,11 +39,11 @@
                             <radio color="#0091E6" style="transform:scale(0.7)" :value="2" :checked="data.sex === 2"/>女
                         </label>
                     </radio-group>
-                    <view v-else class="form__note">{{data.sex == 1 ? '男' : '女'}}</view>
+       
                 </view>
                 <view class="form__cell">
                     <view class="form__label">身份证号</view>
-                    <input class="formInput__field formInput__field--right" type="idcard" name="id_card" :disabled="review_state != 2" v-model="data.id_card" placeholder="请输入身份证号" placeholder-style="color: #999;"/>
+                    <input class="formInput__field formInput__field--right" type="idcard" name="id_card"  v-model="data.id_card" placeholder="请输入身份证号" placeholder-style="color: #999;"/>
                 </view>
                 <view class="form__cell" v-if="review_state === 1">
                     <view class="form__label">认证时间</view>
@@ -72,7 +73,7 @@
                     </view>
                 </view>
             </view>
-            <view class="card card--full" v-if="review_state === 2">
+            <view class="card card--full" >
                 <view class="checked">
                     <label class="checked__field" style="width: auto;" @click="_checked">
                         <checkbox color="#0091E6" :checked="is_chacked" style="transform:scale(0.7)"/>
@@ -86,7 +87,7 @@
             <view class="foot" v-if="review_state != 1">
                 <button v-if="review_state == 4" class="foot__btn" type="warn" @tap="_verifyCencel">取消审核</button>
                 <button v-if="review_state == 3" class="foot__btn" type="warn" @tap="clearData">重新认证</button>
-                <button v-if="review_state == 2" class="foot__btn" type="primary" formType="submit">提交认证信息</button>
+                <button  class="foot__btn" type="primary" formType="submit">提交认证信息</button>
             </view>
 		</form>
         
@@ -227,7 +228,8 @@
                 }
                 toast.loading('图片上传中，请稍后...');
                 uploadPic(this.idcard_img[0].path, {}).then(res => {
-                    send.id_card_img = res.data.source;
+                    send.id_card_img = res.data.source; 
+					console.log(send.id_card_img);
                     this.sendData(send);
                 }, err => {
                     console.log(err)

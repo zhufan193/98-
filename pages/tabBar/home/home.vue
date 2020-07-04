@@ -3,12 +3,11 @@
         <view class="is_compile" v-if="is_compile">测试网络</view>
 		<uni-swiper-dot :info="swiperData" :current="swiperCurrent" mode="long">
 			<swiper class="swiper-box" autoplay="true" circular="true" @change="onChangeSwiper">
-				<swiper-item class="swiper-item" v-for="(item ,index) in swiperData" :key="index" @tap="goBanner(item)">
-					<image :src="item.image_url" mode="aspectFill" />
+				<swiper-item  class="swiper-item" v-for="(item ,index) in swiperData" :key="index" @tap="goBanner(item)">
+					<image :src="item.img" mode="aspectFill" />
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
-        
         <view class="boxTop">
             <view class="grid">  
                 <view class="grid__item" @tap="goPage('/pages/oil/tabbar/tabbar')">
@@ -46,7 +45,7 @@
             <view class="boxTop__newDay">
                 <view class="boxTop__newDayItem" @tap="goTabBar('/pages/tabBar/sail/sail')">
                     <view class="boxTop__newDayRad">
-                        {{sail_size}}
+                        {{sum.cycount}}
                     </view>
                     <view class="boxTop__newDayText">
                         搜船源/条
@@ -54,7 +53,7 @@
                 </view>
                 <view class="boxTop__newDayItem" @tap="goTabBar('/pages/tabBar/pallet/pallet')">
                     <view class="boxTop__newDayRad">
-                       {{pallet_size}}
+                       {{sum.hycount}}
                     </view>
                     <view class="boxTop__newDayText">
                         找货源/条
@@ -70,6 +69,17 @@
                 </view>
             </view>
         </view>
+		<view class="view-Notice">
+			<view class="n-left">
+				<!-- 九八公告 -->
+				<image src="@/static/icon/release.png"></image>
+			</view>
+			<view class="n-right">
+				<view  v-for="(notice,index) of noticeList" :key="index">
+					{{notice.title}}
+				</view>
+			</view>
+		</view>
         
         <view class="head">
             实用工具
@@ -78,7 +88,27 @@
         <view class="content">
             <uni-grid :options="gridData1" :show-border="false" type="oblong" column-num="4" @click="onClickGrid" />
         </view>
-        
+		
+		<view class="xinxi-title">
+			<view class="form__label first-view" ></view>
+		    <view class="form__label second-view" >最新货源推荐</view>
+		</view>
+		
+		<view class="recommend-cla">
+			<view class="class-for"  v-for="(item, index) of dataList" :key="index">
+			   <view class="recommend-first" @click="_goDetail(item)">
+				   <view style="font-size: 34upx;">{{item.qd}}->{{item.zd}}</view>
+				   <view class="view-right">电议</view>
+			   </view>
+			   <view class="recommend-second" @click="_goDetail(item)">
+				   <view>{{item.hw}}，</view>
+				   <view>{{item.ds}}吨，</view>
+				   <view>{{item.ysfs}}，</view>
+				   <view>有效期:{{item.yxq}}±{{item.kq}}天</view>
+			   </view>
+			</view>
+		</view>
+		
         <view class="head">
             今日推荐
             <view class="head__note" @tap="goPage('/pages/news/tabbar/tabbar')">
@@ -88,7 +118,7 @@
         </view>
         
         <view class="news">
-            <block v-for="(newsitem,index) in news" :key="index">
+            <block v-for="(newsitem,index) in newsa" :key="index">
             	<media-list :options="newsitem" :index="index" @click="goPage('/pages/news/detail/detail', {id: newsitem.id})"></media-list>
             </block>
             <uni-load-more :status="loadingType"></uni-load-more>
@@ -103,14 +133,15 @@
 	import uniGrid from '@/components/uni-grid/uni-grid.vue';
 	import mediaList from '@/components/tab-nvue/mediaList.vue';
     import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-    
+    import wlpCardPallet from '@/components/wlp-card/wlp-card-pallet.vue';
     import { is_compile } from '@/config/env.js';
     import {router, toast, localStorage} from '@/common/util.js';
     import permision from '@/common/permission.js';
-	import {sencondgetInit,getInit, getHome, getNewsList} from '@/service/getData';
+	import {secondgetInit,secondrecommend,secondnotice,secondmainlantern,secondsum,secondnews, getInit, getHome, getNewsList} from '@/service/getData';
     
     import { mapState, mapMutations } from 'vuex';
     
+	
     var is_pushReceive = false; // 禁用推送消息和通知消息同时传入
     var pushData = "";
 	function lookPush(msg){
@@ -145,7 +176,8 @@
 			uniSwiperDot,
             uniGrid,
             mediaList,
-            uniLoadMore
+            uniLoadMore,
+			wlpCardPallet
 		},
         computed: mapState(['hasLogin', 'version', 'customer']),
 		data() {
@@ -215,24 +247,50 @@
                         router: '/pages/other/maritime_office/maritime_office'
 					}
                 ],
-                swiperData: [],
+                
                 swiperCurrent: 0,
-                sail_size: 0,
-                pallet_size: 0,
-                ship_size: 0,
                 gridCurrent: 0,
                 banner: [],
                 news: [],
+				newsa:[],//首页新闻推荐
                 page: 1,
                 loadingType: 'more',
-                windowHeight: 0
+                windowHeight: 0,
+				begin:{"type":"config"},//系统接口请求参数
+				mainlantern:{"type":"indeximg"},//主页幻灯片
+				swiperData: [],//主页幻灯片
+				sum:[],//货源信息、船源信息总数
+				sumb:{"type":"indexlistcount"},//船源、货源总数接口请求参数
+				dataList: [], //货源信息
+				noticeList: [], // 公告信息
 			}
 		},
 		onLoad() {
             // 初始化数据
-			sencondgetInit({data:{"type":"config"}}).then(res => { 
-     		console.log(res);
+			// 获取货源信息
+			this.getDataList();
+			// 获取公告信息
+			this.getNotice();
+			//系统参数
+			secondgetInit({data:this.begin}).then(res => { 
+				var lanter = eval('('+res.data+')');
+			console.log(lanter);
 			});
+			//幻灯片接口
+			this.uploada();
+
+			 //货源总数
+				secondsum({data:this.sumb}).then(res => {
+			 	let lantern = eval('('+res.data+')');
+				this.sum=lantern[0].meslist[0];	
+			 });
+			 //主页-新闻资讯
+			 secondnews({data:{"type":"indexnews"}}).then(res => {
+			 	let lantern = eval('('+res.data+')');
+				this.newsa=lantern[0].meslist;
+			 	console.log(this.newsa);
+	
+			 });
             getInit({os: uni.getSystemInfoSync().platform}).then(res => {
                 // 获取接口地址
 				console.log(res);
@@ -328,6 +386,7 @@
 		},
         onReady() {
             // #ifdef APP-PLUS
+			
             var tabBar_Login = plus.nativeObj.View.getViewById("tabbarLogin");
             if(tabBar_Login){
                 plus.navigator.closeSplashscreen();
@@ -349,7 +408,7 @@
                 ]).then(res => {
                     console.log(res)
                 });
-            }
+            };
             // 发布按钮监听
             uni.onTabBarMidButtonTap(function() {
                 uni.navigateTo({
@@ -401,16 +460,87 @@
             ...mapMutations(['CODE_KEY_UPDATA', 'CUSTOMER_UPDATA', 'VERSION_UPDATA', 'GOPAGE_LOGIN', 'TABBAR_MESSAGE_UPDATA']),
             async getData() { // 获取首页数据(同步防止加载前再次加载)
                 await getHome().then(res =>{
-                    this.swiperData = res.data.carousel;
 					console.log("yes");
-					console.log(this.swiperData);
-                    this.sail_size = res.data.ship_market;
-                    this.pallet_size = res.data.cargo_market;
-                    this.ship_size = res.data.ship_count;
                     this.banner = res.data.banner;
                 });
                 this.getNewsData();
             },
+			_goDetail(param) {
+				// 需要判断是否角色认证
+				//船东未认证进入的页面
+				//router.navigateTo('/pages/sail/register/ship-files');
+				//船东认证进入的页面
+				console.log("999999999999999999"+JSON.stringify(param));
+			     router.navigateTo('/pages/pallet/detail/detail?id=' + param.id);
+			},
+			//  获取最新货源信息
+			getDataList() {
+			    let send = {
+			        "type":"indexhyrecomm"
+			    };
+			    secondrecommend({data:send}).then(res => {
+
+					let newsa = eval('('+res.data+')')[0].meslist;
+			        if(newsa.length < 3){
+						this.dataList = newsa;
+			        }else{
+						this.dataList = newsa.slice(0,3);
+			        }
+			    })
+			},
+			// 获取公告信息
+			getNotice(){
+				secondnotice({data:{"type":"indexmes"}}).then(res => {
+					this.noticeList = eval('('+res.data+')')[0].meslist;
+					console.log("11111111111"+JSON.stringify(this.noticeList))
+				})
+			},
+			
+			uploada(){
+				 var that = this ;
+				 uni.getStorage({
+					 key: 'addliiii',
+					 complete: function (res) {
+						 if(res.data.length > 0){	
+							 that.swiperData = res.data;
+							 console.log(that.swiperData[0].img);
+						 }
+						 else{
+							 console.log(res.data.length);
+							 that.uploadlantern();
+						 }	
+					 }
+				 })
+			},
+			uploadlantern(){
+				secondmainlantern({data:this.mainlantern}).then(res => {
+					var lantern = eval('('+res.data+')');
+					console.log('接口返回数据：'+JSON.stringify(lantern[0].meslist));
+					var that = this;
+					// 清空缓存数组
+					that.swiperData = [];
+					var imgurl = lantern[0].meslist;
+					for(var i = 0; i<imgurl.length;i++){
+						uni.downloadFile({
+							url: imgurl[i].img, //仅为示例，并非真实的资源
+							success: (res) => {
+								if (res.statusCode === 200) {
+									that.swiperData.push({"img":res.tempFilePath});
+									console.log("下载图片成功:"+"0000000000000"+JSON.stringify(that.swiperData));
+									if(i == imgurl.length){
+										console.log(that.swiperData);
+										uni.setStorage({
+										   key: 'addliiii',
+										   data: that.swiperData,
+										   success: function () {}
+										});
+									}
+								}
+							}
+						});
+					}	
+				});													
+			},
             getNewsData(type = 'DownRefresh') { // 获取首页底部新闻
                 if(type == 'DownRefresh'){
                     this.page = 1;
@@ -682,5 +812,79 @@
         @include flex(null, null, column);
         background-color: #fff;
     }
-    
+	.xinxi-title{
+		flex-direction: row;
+		display: flex;
+		background-color: #ffffff;
+		padding: 24upx 0;
+		border: 10upx;
+		.first-view{
+			background-color: #007AFF;
+			padding: 20upx 10upx 0;
+			margin-top: 10upx;
+		}
+		.second-view{
+			margin-top: 10upx;
+			font-size: 36upx;
+			margin-left: 30upx;
+		}
+	}
+	.recommend-cla{
+		background-color: #ffffff;
+		padding: 20upx 20upx 20upx 40upx;
+		.class-for{
+			padding: 20upx 0;
+			border-bottom: 1px solid #e3e3e3;
+			
+		}
+		.recommend-first{
+			flex-direction: row;
+			display: flex;
+			padding: 10upx 0;
+			color: #000000;
+			.view-right{
+				position: absolute;
+				right: 25upx;
+				color: #007AFF;
+				font-size: 32upx;
+			}
+		}
+		.recommend-second{
+			flex-direction: row;
+			display: flex;
+			color: #8b8b8b;
+			padding: 10upx 0;
+			view{
+				font-size: 24upx;
+			}
+		}
+	}
+    .view-Notice{
+		flex-direction: row;
+		display: flex;
+		position: relative;
+		background-color: #fff;
+		border-radius: $uni-border-radius-lg / 2;
+		box-shadow: 0 4upx 12upx rgba(0,0,0,0.15);
+		padding: 10upx 0;
+		.n-left{
+			margin-left: 20upx;
+			font-size: 35upx;
+			width: 90upx;
+			text-align: center;
+			
+			image{
+				top: 10upx;
+				width: 80upx;
+				height: 80upx;
+			}
+		}
+		.n-right{
+			margin-left: 20upx;
+			view{
+				padding: 10upx 0;
+				font-size: 28upx;
+			}
+		}
+	}
 </style>

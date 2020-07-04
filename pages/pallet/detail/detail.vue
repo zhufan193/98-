@@ -1,26 +1,26 @@
 <template>
-	<view :class="{page: router !== 'user'}" v-if="data">
+	<view :class="{page: router !== 'user'}" v-if="dataa">
         <view class="card card--full">
             <view class="card__main--col">
                 <view class="card__col">
                     <view class="info">
                         <view class="info__label">出发港</view>
-                        <view class="info__txt">{{data.cargo_info.departure_na}}</view>
+                        <view class="info__txt">{{dataa.qdshi}}</view>
                     </view>
                     <view class="info">
-                        <view class="info__label">联系人</view>
-                        <view class="info__txt">{{getfirstname(data.cargo_info.contact)}},{{getphone(resPhone)}}</view>
+                        <view class="info__label">联系人,联系方式</view>
+                        <view class="info__txt">{{getfirstname(dataa.lxr)}},{{getphone(dataa.lxdh)}}</view>
                     </view>
                 </view>
                 <view class="card__col">
                     
 					<view class="info">
 					    <view class="info__label">到达港</view>
-					    <view class="info__txt">{{data.cargo_info.target}}</view>
+					    <view class="info__txt">{{dataa.zdshi}}</view>
 					</view>
                     <view class="info">
                         <view class="info__label">发布时间</view>
-                        <view class="info__txt">{{data.cargo_info.publish_at}}</view>
+                        <view class="info__txt">{{dataa.addtime}}</view>
                     </view>
                 </view>
             </view>
@@ -34,49 +34,47 @@
             <view class="source-xinxi">
 				<view class="source-first">
 				    <view class="form__label">货源名称:</view>
-				    <view class="form__note">{{data.cargo_info.verify_type == 2 ? '企业发布' : '个人发布'}}</view>
+				    <view class="form__note">{{dataa.hymc}}</view>
 				</view>
 				<view class="source-second">
 				    <view class="form__label">包装形式:</view>
-				    <view class="form__note">{{data.cargo_info.company}}</view>
+				    <view class="form__note">{{dataa.bzxs}}</view>
 				</view>
 			</view>
 			
 			<view class="source-xinxi">
 				<view class="source-first">
 				    <view class="form__label">货物吨位:</view>
-				    <view class="form__note">{{data.cargo_info.price == 0 ? '电议' : (data.cargo_info.price + '元/吨')}}</view>
+				    <view class="form__note">{{dataa.hwdw}}吨</view>
 				</view>
 				<view class="source-second">
 				    <view class="form__label">货物单价:</view>
-				    <view class="form__note">{{data.cargo_info.pay_method == 2 ? '卸后付清' : '卸前支付'}}</view>
+				    <view class="form__note">{{dataa.price}}</view>
 				</view>
 			</view>
             
             <view class="source-xinxi">
 				<view class="source-first">
 				    <view class="form__label">运费:</view>
-				    <view class="form__note">{{data.cargo_info.tax == 0 ? '不含' : '含税'}}</view>
+				    <view class="form__note">{{dataa.allprice}}</view>
 				</view>
 				<view class="source-second">
 				    <view class="form__label">航运类型:</view>
-				    <view class="form__note">{{data.cargo_info.demurrage == 0 ? '电议' : (data.cargo_info.demurrage + '元/吨')}}</view>
+				    <view class="form__note">{{dataa.hylx}}</view>
 				</view>
 			</view>
 			<view class="source-xinxi">
 				<view class="source-new">
 				    <view class="form__label">装运期限:</view>
-				    <view class="form__note"></view>
+				    <view class="form__note">{{dataa.zyqx}}</view>
 				</view>
 				
 			</view>
 			<view class="source-xinxi">
 				<view class="source-first">
 				    <view class="form__label">联系人:</view>
-				    <view class="form__note">{{getfirstname(data.cargo_info.contact)}}
-						<text @click="add_person" style="color: #007AFF;font-size: 30upx;margin-left: 10upx;">
-							添加好友
-						</text>
+				    <view class="form__note">{{getfirstname(dataa.lxr)}}
+					
 					</view>
 				</view>
 				<view class="source-second">
@@ -87,7 +85,7 @@
 			<view class="source-xinxi">
 				<view class="source-first">
 				    <view class="form__label">联系电话:</view>
-				    <view class="form__note">{{getphone(resPhone)}}</view>
+				    <view class="form__note">{{getphone(dataa.lxdh)}}</view>
 				</view>
 			</view>
         </view>
@@ -97,10 +95,10 @@
 				</view>
 		<view class="view-br"></view>
 		<view class="beizhu">
-		    {{data.cargo_info.remark ? data.cargo_info.remark : '无'}}
+		    {{dataa.bzxx ? dataa.bzxx : '无'}}
 		</view>
 		
-		<view class="xinxi-title">
+		<view class="xinxi-title">        
 			<view class="form__label first-view" ></view>
 		    <view class="form__label second-view" >相似货源推荐</view>
 		</view>
@@ -123,8 +121,8 @@
 		   </view>
 	   </view>
 	   
-	   <uni-popup :show="isshow" position="middle" mode="fixed">
-	   	<view class="popup-view">
+	    <uni-popup :show="isshow" position="middle" mode="fixed">
+			<view class="popup-view">
 	   			<view @click="isshow = false" style="position: absolute;right: 20upx;">
 	   				<image src="@/static/img/cancel.jpg" style="width: 35upx;height: 35upx;"></image>
 	   			</view>
@@ -134,7 +132,7 @@
 	   						<image src="@/static/img/goods.png" style="width: 35upx;height: 35upx;"></image>
 	   					</view>
 	   					<view class="yg-second">
-	   						<input placeholder="请填写货物名称" />
+	   						<input v-model="hName" placeholder="请填写货物名称" />
 	   					</view>
 	   				</view>
 	   			<view class="yugou">
@@ -142,40 +140,68 @@
 	   					<image src="@/static/img/num.png" style="width: 35upx;height: 35upx;"></image>
 	   				</view>
 	   				<view class="yg-second">
-	   					<input placeholder="请填写货物吨数" />
+	   					<input v-model="hNum"  placeholder="请填写货物吨数" />
 	   				</view>
 	   			</view>
 	   			<view class="yugou">
 	   				<view class="yg-first">
-	   					<image src="@/static/img/one-money.png" style="width: 35upx;height: 35upx;"></image>
+	   					<image src="@/static/img/one-mongy.png" style="width: 35upx;height: 35upx;"></image>
 	   				</view>
 	   				<view class="yg-second">
-	   					<input placeholder="承运单价 元/吨" />
+	   					<input v-model="oneMongy" placeholder="承运单价 元/吨" />
 	   				</view>
 	   			</view>
 	   			<view class="yugou">
 	   				<view class="yg-first">
-	   					<image src="@/static/icon/address-location.png" style="width: 35upx;height: 35upx;"></image>
+	   					<image src="@/static/img/beizhu.png" style="width: 35upx;height: 35upx;"></image>
 	   				</view>
 	   				<view class="yg-second">
-	   					<input placeholder="备注信息" />
+	   					<input v-model="beizhu" placeholder="备注信息" />
 	   				</view>
 	   			</view>
 	   			<view class="yugou">
 	   				<view class="yg-first">
-	   					<image src="@/static/img/goods.png" style="width: 35upx;height: 35upx;"></image>
+	   					<image src="@/static/img/code.png" style="width: 35upx;height: 35upx;"></image>
 	   				</view>
 	   				<view class="yg-second" style="display: flex;flex-direction: row;">
-	   						<view style="width: 60%;"><input placeholder="输入验证码" /></view>
+	   						<view style="width: 60%;"><input v-model="code" placeholder="输入验证码" /></view>
 	   						<view style="margin-left: 30upx;"><text>9898</text></view>
 	   				</view>
 	   			</view>
 	   			
-	   			<view class="bug-button" @click="isshow = false">
-	   				确认预购
+	   			<view class="bug-button" @click="goto_submit">
+	   				确认提交
 	   			</view>
+				<view class="view-bug">{{bugXin}}</view>
 	   		</view>
 	   </uni-popup>
+	   
+	   <uni-popup :show="isSuccess" position="middle" mode="fixed">
+	   		<view class="popup-view">
+				<view  style="text-align: center;">
+					<view class="yg-first">
+						<image src="@/static/img/success.png" style="width: 80upx;height: 80upx;"></image>
+					</view>
+					<view class="yg-second" style="font-size: 30upx;color: #3ebcff;">
+						抢单成功
+					</view>
+				</view>
+	   		</view>
+	   </uni-popup>
+	   
+	   <uni-popup :show="isFail" position="middle" mode="fixed">
+	   		<view class="popup-view">
+				<view  style="text-align: center;">
+					<view class="yg-first">
+						<image src="@/static/img/del.png" style="width: 80upx;height: 80upx;"></image>
+					</view>
+					<view class="yg-second" style="font-size: 30upx;color: red;">
+						抢单失败
+					</view>
+				</view>
+	   		</view>
+	   </uni-popup>
+	   
 	   <view class="get-goods" @click="isshow=true">
 		   立即抢单发货
 	   </view>
@@ -216,23 +242,33 @@
 
 <script>
     import uniIcons from '@/components/uni-icons/uni-icons.vue'
-    
+    import uniPopup from '@/components/uni-popup/uni-popup.vue'
     import { router, toast } from '@/common/util.js'
-    import { getPalletDetail, postCollection, postUnCollection, postActionDel } from '@/service/getData.js'
+    import { getPalletDetail, secondgoodsSourceOrder,postCollection, postUnCollection, postActionDel ,secondgoodsdetail} from '@/service/getData.js'
     
     import { mapState, mapActions, mapMutations } from 'vuex';
     
 	export default {
         components:{
-            uniIcons
+            uniIcons,
+			uniPopup
         },
 		data() {
 			return {
                 router: '',
-				id: null,
-                data: null,
+				id: null,  // 货源id
+				uid: null, //用户编号
+                dataa: null,
 				isshow: false, //是否显示抢单发货弹框
-				tems:[{},{}]
+				tems:[{},{}],
+				hName: '', //货物名称
+				hNum: '', // 货物吨数
+				oneMongy: '', // 承运单价
+				beizhu: '', //备注信息
+				code: '', //验证码
+				bugXin: '', //提示信息
+				isSuccess: false,
+				isFail: false,
 			}
 		},
         computed:{
@@ -262,7 +298,7 @@
             }
         },
         onLoad(options) {
-			if (options && options.id) {
+			/* if (options && options.id) {
                 if(options.router && options.router === 'user'){
                     this.router = options.router;
                     // #ifdef APP-PLUS  
@@ -271,15 +307,24 @@
                         text: '删除',  
                     });  
                     // #endif
-                }
+                } */
 				this.id = options.id;
-                toast.loading();
-                getPalletDetail(this.id).then(res => {
+				console.log(this.id);
+				 
+				secondgoodsdetail({data:{"type":"hyinfo","hyid":this.id}}).then(res => {
+					let goodnews = eval('('+res.data+')');		
+                    this.dataa = goodnews[0].meslist[0];
+					this.hName = this.dataa.hymc;
+					this.hNum = this.dataa.hwdw;
+					this.uid = this.dataa.uid;
+				});
+                //toast.loading();
+               /* getPalletDetail(this.id).then(res => {
                     this.data = res.data;
                     toast.hideLoading()
-                });
-			}
-        },
+                }); */
+			},
+        
         onNavigationBarButtonTap() { // 标题栏按钮点击事件
             if(this.router === 'user'){
                 this._del();
@@ -406,6 +451,57 @@
 				var temvalue = tem.substring(0,3)+'****'+tem.substring(7,11);
 			    return temvalue;
 			},
+			// 确认提交
+			goto_submit() {
+				// if(!this.hName){
+				// 	this.bugXin = "请输入货物名称！";
+				// 	return;
+				// }
+				// if(!this.oneMongy){
+				// 	this.bugXin = "请输入承运单价 元/吨！";
+				// 	return;
+				// }
+				// if(!this.code){
+				// 	this.bugXin = "验证码输入错误！";
+				// 	return;
+				// }
+				this.bugXin = '';
+				let sent ={
+					"type":"qdtj",
+					"cbid":"1", 
+					"hyid":this.id,
+					"uid":this.uid ,
+					"lxr":"张三" ,
+					"lxdh":"13601588888" ,
+					"dj":this.oneMongy,
+				};
+				var that = this;
+				secondgoodsSourceOrder({data:sent}).then(res => {
+					let orders = eval('('+res.data+')');
+					console.log("抢单接口返回结果"+JSON.stringify(orders));
+					this.isshow = false;
+					if(orders[0].stat == "1"){
+						console.log("抢单成功");
+						this.isSuccess = true;
+						setTimeout(that.hidesuccess,3000);
+					}else{
+						this.isFail = true;
+						setTimeout(that.hidefail,3000);
+						console.log("抢单失败")
+					}
+				})
+			},
+			hidesuccess() {
+				this.isSuccess = false;
+			},
+			hidefail() {
+				this.isFail = false;
+			},
+			timeout1(ms) {
+			  return new Promise(resolve => {
+			    setTimeout(resolve, ms);
+			  })
+			}
 		}
 	}
 </script>
@@ -641,7 +737,7 @@
 			border-radius: 10upx;
 			color: #1988ff;
 			.yg-first{
-				margin-top: 8upx;
+				margin-top: 6upx;
 			}
 			.yg-second{
 				margin-left: 30upx;
@@ -660,6 +756,11 @@
 			font-size: 30upx;
 			padding: 20upx 0;
 			margin-top: 30upx;
+		}
+		.view-bug{
+			color: red;
+			font-size: 24upx;
+			margin-top: 5upx;
 		}
 	}
 </style>

@@ -9,8 +9,8 @@
 		<view>
 			<uni-swiper-dot :info="swiperData" :current="swiperCurrent" mode="long">
 				<swiper class="swiper-box" autoplay="true" circular="true" @change="onChangeSwiper">
-					<swiper-item class="swiper-item" v-for="(item ,index) in swiperData" :key="index" @tap="goBanner(item)">
-						<image :src="item.image_url" mode="aspectFill" />
+					<swiper-item class="swiper-item" v-for="(item ,index) in swiperData" :key="index" @tap="goBanner()">
+						<image :src="item.img" mode="aspectFill"/>
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
@@ -44,7 +44,7 @@
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue';
     import selectPicker from '@/components/select-picker/select-picker.vue';
     import { router, toast, dateUtils } from '@/common/util.js';
-    import { getOilBidList, getOilStoreList } from '@/service/getData.js';
+    import { getOilBidList, getOilStoreList,secondoilslantern,secondoilslist } from '@/service/getData.js';
     
     import { mapState, mapMutations } from 'vuex';
     
@@ -82,25 +82,20 @@
                 }],
 				indexActive: 1,
                 drawerVisible: false,
-				swiperData: [{   // 轮播图
-					"id": 8,
-					"image_url": "/static/icon/home-grid-3.png",
-					"link": "/pages/common/rich-text-full/rich-text-full?id=8"
-				}, {
-					"id": 2,
-					"image_url": "/static/icon/home-grid-3.png",
-					"link": "/pages/common/rich-text-full/rich-text-full?id=9"
-				}],
+				swiperData: [],
 				array: ['选择区域','渤海区', '黄海区', '东海区', '北部湾','南海区','长江','香港'],
 				boatindex:'',
 				transportarray:['选择燃料种类','柴油','重油','轻循环油','润滑油','导热油','液压油'],
 				transportindex:'',
+				swiperCurrent: 0,
 			};
 		},
         async onLoad() {
             toast.loading();
             await this.getData('init');
             this.windowHeight = uni.getSystemInfoSync().windowHeight;
+			//幻灯片接口
+			this.uploada();
             toast.hideLoading();
         },
         // onShow() {
@@ -160,9 +155,11 @@
                 router.navigateTo(url);
             },
             _goDetail(index, id) {
-                router.navigateTo(this.data[index].router, {id: id});
+                // router.navigateTo(this.data[index].router, {id: id});
+				router.navigateTo('/pages/oil/store-detail/store-detail',{id: id})
             },
             getData(type='DownRefresh') {
+				
                 let index = this.indexActive;
                 if(type == 'DownRefresh'){
                     this.data[index].page = 1;
@@ -173,21 +170,33 @@
                     if(this.data[index].loadingType == 'noMore') return;
                     this.data[index].loadingType = 'loading';
                 }
-                if(index === 0){
-                    getOilBidList({page: this.data[index].page, harbor_id: this.data[index].harbor_id}).then(res => {
-                        this.setData(type, res, index);
-                    });
-                }else if(index === 1){
-                    getOilStoreList({page: this.data[index].page, harbor_id: this.data[index].harbor_id}).then(res => {
-                        this.setData(type, res, index);
-                    });
-                }
+    //             if(index === 0){
+    //                 getOilBidList({page: this.data[index].page, harbor_id: this.data[index].harbor_id}).then(res => {
+    //                     this.setData(type, res, index);
+    //                 });
+    //             }
+				// else if(index === 1){
+    //                 getOilStoreList({page: this.data[index].page, harbor_id: this.data[index].harbor_id}).then(res => {
+    //                     this.setData(type, res, index);
+    //                 });
+    //             }
+			
+				let sent = {"type":"rygylist","gyqy":"","yp":"","size":"15","page":this.data[index].page};
+				secondoilslist({data:sent}).then(res => {
+					var lantern = eval('('+res.data+')');
+					console.log("获取燃油数据开始："+lantern);
+					if(lantern[0].stat == 1){
+						console.log("获取燃油数据成功："+ JSON.stringify(lantern[0].meslist));
+						// this.data = lantern[0].meslist;
+						this.setData(type, lantern[0].meslist, index);
+					}
+				}); 
             },
             setData(type, res, index){
                 if(this.data[index].page == 1){
-                    this.data[index].list = res.data;
+                    this.data[index].list = res;
                 }else{
-                    this.data[index].list = this.data[index].list.concat(res.data);
+                    this.data[index].list = this.data[index].list.concat(res);
                 }
                 if(index === 1){
                     this.$nextTick(function() {
@@ -249,6 +258,55 @@
 			},
 			boat(index){
 				this.boatindex=index;
+			},
+			uploada(){
+				 var that = this ;
+				 uni.getStorage({
+					 key: 'oils',
+					 complete: function (res) {
+						 if(res.data.length > 0){	
+							 that.swiperData = res.data;
+							 console.log("111111111"+that.swiperData[0].img);
+						 }
+						 else{
+							 console.log(res.data.length);
+							 that.uploadlantern();
+						 }	
+					 }
+				 })
+			},
+			uploadlantern(){
+				let sent = {"type":"hdp","lx":"56" };
+				secondoilslantern({data:sent}).then(res => {
+					var lantern = eval('('+res.data+')');
+					console.log('接口返回数据：'+JSON.stringify(lantern[0].meslist));
+					var that = this;
+					// 清空缓存数组
+					that.swiperData = [];
+					var imgurl = lantern[0].meslist;
+					for(var i = 0; i<imgurl.length;i++){
+						uni.downloadFile({
+							url: imgurl[i].img, //仅为示例，并非真实的资源
+							success: (res) => {
+								if (res.statusCode === 200) {
+									that.swiperData.push({"img":res.tempFilePath});
+									console.log("下载图片成功:"+"0000000000000"+JSON.stringify(that.swiperData));
+									if(i == imgurl.length){
+										console.log(that.swiperData);
+										uni.setStorage({
+										   key: 'oils',
+										   data: that.swiperData,
+										   success: function () {}
+										});
+									}
+								}
+							}
+						});
+					}	
+				});													
+			},
+			onChangeSwiper(e){
+			    this.swiperCurrent = e.detail.current;
 			},
         }
 	}

@@ -122,11 +122,11 @@
 				<uni-list-item @click="goPage('/pages/port/agent/agent')" :note="userInfo.invoice" title="港口代理" thumb="/static/icon/icon-qyrz.png" />
 			</view>
 			<view class="card uni-list" v-if="userRole == 1">
-			    <uni-list-item @click="goPage('/pages/order/release/ship')" :note="userInfo.bank" title="船源管理" thumb="/static/icon/icon-sm.png" />
-			    <uni-list-item @click="goPage('/pages/order/getOrder/shipSource')" :note="userInfo.invoice" title="船源订单" thumb="/static/icon/icon-qyrz.png" />
-				<uni-list-item @click="goPage('/pages/order/shipTrading/shipTrading')" :note="userInfo.invoice" title="船舶交易" thumb="/static/icon/icon-qyrz.png" />
-				<uni-list-item @click="goPage('/pages/order/shipTrading/trading-order')" :note="userInfo.invoice" title="船舶交易订单" thumb="/static/icon/icon-qyrz.png" />
-				<uni-list-item @click="goPage('/pages/order/service-appointment/service-appointment')" :note="userInfo.invoice" title="船舶维修预约单" thumb="/static/icon/icon-qyrz.png" />
+			    <uni-list-item @click="goPage('/pages/order/release/ship')" :note="userInfo.bank" title="船源管理" thumb="/static/img/ShipSourceManagement.png.png" />
+			    <uni-list-item @click="goPage('/pages/order/getOrder/shipSource')" :note="userInfo.invoice" title="船源订单" thumb="/static/img/ShipSourceOrder.png" />
+				<uni-list-item @click="goPage('/pages/order/shipTrading/shipTrading')" :note="userInfo.invoice" title="船舶交易" thumb="/static/img/ShipTrading.png" />
+				<uni-list-item @click="goPage('/pages/order/shipTrading/trading-order')" :note="userInfo.invoice" title="船舶交易订单" thumb="/static/img/ShipTradingOrder.png" />
+				<uni-list-item @click="goPage('/pages/order/service-appointment/service-appointment')" :note="userInfo.invoice" title="船舶维修预约单" thumb="/static/img/ShipMaintenance.png" />
 			</view>
 		</view>
         <view class="content">
@@ -141,7 +141,7 @@
                 <uni-list-item @click="_isVerify('/pages/ship/management/management')" :note="userInfo.ship > 0 ? '已认证(' + userInfo.ship + ')' : '未认证'" title="船舶认证/管理" thumb="/static/icon/icon-cbjg.png" />
             </view>
             <view class="card uni-list">
-				<uni-list-item @click="goPage('/pages/company/about-us/about-us')" :note="userInfo.invoice" title="关于我们" thumb="/static/icon/icon-qyrz.png" />
+				<uni-list-item @click="goPage('/pages/company/about-us/about-us')" :note="userInfo.invoice" title="关于我们" thumb="/static/img/aboutUs.png" />
                 <uni-list-item @click="goPage('/pages/bank/list/list')" :note="userInfo.bank" title="银行账户管理" thumb="/static/icon/icon-sm.png" />
                 <uni-list-item @click="goPage('/pages/invoice/list/list')" :note="userInfo.invoice" title="发票管理" thumb="/static/icon/icon-qyrz.png" />
             </view>

@@ -92,6 +92,20 @@
 				...mapActions(['getUserInfo']),
 			    ...mapMutations(['GOPAGE_LOGIN', 'RECORD_USERINFO', 'LOGOUT', 'COMPANY_TEMP_UPDATA', 'SHIP_TEMP_UPDATA']),
 				// 获取用户信息，进行页面跳转
+
+			   /* goPage(url, param = null, hasLogin = true) {
+			        if(url == undefined){
+			            toast.show('开发中');
+			            return;
+			        }
+					// 判断是否登录
+			        // if(!this.hasLogin && hasLogin){
+			        //     toast.show('请点击登录！');
+			        //     return;
+			        // }
+			        router.navigateTo(url, param);
+			    }, */
+
 			    
 				goPage() {
 					console.log("签订合同")

@@ -2,6 +2,7 @@
 	<view class="main-all">
 		<view class="main-head">
 			<view class="head-first">合同文件</view>
+
 			<view class="head-second" @click="download">
 				<image src="@/static/img/right2.png" style="width: 30upx;height: 30upx;"></image>
 				下载

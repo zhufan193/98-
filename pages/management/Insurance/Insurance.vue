@@ -1,4 +1,5 @@
 <template>
+
 	<!-- 保险合同管理 -->
 	<view class="main-all">
 		<view class="main-head">
@@ -10,6 +11,7 @@
 				搜索
 			</view>
 		</view>
+
 		
 		<uni-load-more status="1"></uni-load-more>
 	</view>

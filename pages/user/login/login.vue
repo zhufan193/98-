@@ -15,7 +15,7 @@
             <view class="form__cell--column">
                 <view class="form__label">手机号</view>
                 <view class="formInput">
-                    <input class="formInput__field" type="number" confirm-type="next" :value="userName"   :placeholder="is_pwd ? '请输入用户名/手机号' : '请输入手机号'" placeholder-style="color:#ccc"
+                    <input class="formInput__field"  confirm-type="next" :value="userName"   :placeholder="is_pwd ? '请输入用户名/手机号' : '请输入手机号'" placeholder-style="color:#ccc"
                     @input="bindUserName" 
                     @tap="focus.userName=true" 
                     @confirm="focus.userName=false;focus.userPwd=true;" 
@@ -63,7 +63,7 @@
     import uniIcons from '@/components/uni-icons/uni-icons.vue'
     
 	import { router, toast, check, localStorage } from '@/common/util.js';
-	import { exam,postSecCode, postLoginAccount, postLoginPhone } from '@/service/getData';
+	import {secondlogin,postSecCode, postLoginAccount, postLoginPhone } from '@/service/getData';
     import { mapState, mapMutations } from 'vuex';
     
     export default {
@@ -280,46 +280,62 @@
 				}
 				// #endif
                 if(this.is_pwd){
-					console.log("adadk9");
-					console.log('dadad');
-					exam({'id':3}).then(res => {
-						console.log('dadad');
+					secondlogin({data:{"type":"login","uname":this.userName,"upass":this.userPwd}}).then(res => {
+						let lantern = eval('('+res.data+')');
+					 	console.log(lantern[0].meslist[0]);
+						this.RECORD_USERINFO(lantern[0].meslist[0]);
+						uni.showToast({title: '登录成功！'});
+					                  setTimeout(function(){
+													
+						                     /**
+						                      * 强制登录时使用reLaunch方式跳转过来
+						                      * 返回首页也使用reLaunch方式
+						                       */
+						                      if (this.forcedLogin) {
+						                          router.reLaunch('/pages/tabBar/home/home')
+						                      } else {
+						                          router.navigateBack();
+						                      }
+						                 },1200);
 					});
-					
-                    postLoginAccount({'account': this.userName, 'password': this.userPwd,'client':clientId}).then(res => {
+                    //postLoginAccount({'account': this.userName, 'password': this.userPwd,'client':clientId}).then(res => {
+					// 	let lantern = eval('('+res.data+')');
+					// 	console.log(lantern[0].meslist);
+					// 	this.RECORD_USERINFO(lantern[0].meslist);
+					// });
                         // 统计
-						console.log("adadk0");
-                        uni.report('lgoin',{
-                            'login_type': this.is_pwd,
-                            'account': this.userName,
-                            'name': res.data.realname,
-                            'age': res.data.sex,
-                            'message': res.data.message
-                        });
-                        // 记录用户信息
+						// console.log("adadk0");
+      //                   uni.report('lgoin',{
+      //                       'login_type': this.is_pwd,
+      //                       'account': this.userName,
+      //                       'name': res.data.realname,
+      //                       'age': res.data.sex,
+      //                       'message': res.data.message
+      //                   }); */
+      //                   // 记录用户信息
 						
-						console.log(res.data);
-                        this.TOKEN_USERUPDATA(res.data.token);
-                        this.RECORD_USERINFO(res.data);
+						// /* console.log(res.data);
+      //                   this.TOKEN_USERUPDATA(res.data.token);
+      //                   this.RECORD_USERINFO(res.data);
 						
-                        this.btnLoading = false;
-                        uni.showToast({title: '登录成功！'});
-                        setTimeout(function(){
+      //                   this.btnLoading = false; 
+       //                  uni.showToast({title: '登录成功！'});
+       //                  setTimeout(function(){
 							
-                            /**
-                             * 强制登录时使用reLaunch方式跳转过来
-                             * 返回首页也使用reLaunch方式
-                             */
-                            if (this.forcedLogin) {
-                                router.reLaunch('/pages/tabBar/home/home')
-                            } else {
-                                router.navigateBack();
-                            }
-                        },1200);
-                    }, err => {
-                        this.messageTxt = err.message;
-                        this.btnLoading = false;
-                    });
+       //                      /**
+       //                       * 强制登录时使用reLaunch方式跳转过来
+       //                       * 返回首页也使用reLaunch方式
+       //                       */
+       //                      if (this.forcedLogin) {
+       //                          router.reLaunch('/pages/tabBar/home/home')
+       //                      } else {
+       //                          router.navigateBack();
+       //                      }
+       //                  },1200);
+       //              }, err => {
+       //                  this.messageTxt = err.message;
+       //                  this.btnLoading = false;
+       //              });
                }else{
                     postLoginPhone({'account': this.userName, 'sec_key': this.secCodekey, 'sec_code': this.userPwd,'client':clientId}).then(res => {
                         // 统计

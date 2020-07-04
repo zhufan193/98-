@@ -5,6 +5,7 @@ import {
     CODE_KEY_UPDATA,            // code_key记录
     CUSTOMER_UPDATA,            // app信息记录
     RECORD_USERINFO,            // 记录用户信息
+	RECORD_STSTEMCONFIG,        //记录系统设置信息
     LOGOUT,                     // 注销
     TABBAR_MESSAGE_UPDATA,      // tabBar消息更新
     LOCATION_UPDATA,            // 当前经纬度更新
@@ -96,6 +97,21 @@ export default {
         }
         localStorage.setStore('userInfo', state.userInfo);
     },
+	// 记录系统设置信息
+	[RECORD_STSTEMCONFIG](state, param) {
+	    if(param.hasOwnProperty('field')){
+	        if(param.field == 'message'){
+	            this.commit(TABBAR_MESSAGE_UPDATA, param.message);
+	        }
+	        state.systemConfig[param.field] = param[param.field];
+	    }else{
+	        if(param.hasOwnProperty('message')){
+	            this.commit(TABBAR_MESSAGE_UPDATA, param.message);
+	        }
+	        state.systemConfig = param;
+	    }
+	    localStorage.setStore('systemConfig', state.systemConfig);
+	},
     // 注销清除登陆信息
     [LOGOUT](state) {
         console.log('注销清除登陆信息');
